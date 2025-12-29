@@ -1,0 +1,61 @@
+# TeamChat Plugin Configuration
+
+# Team settings
+team:
+  max-members: 10               # Maximum number of members per team
+  max-name-length: 16           # Maximum length of team names
+  max-tag-length: 4             # Maximum length of team tags
+  name-regex: '^[A-Za-z0-9_]+$' # Regex for valid team names (only alphanumeric)
+  tag-regex: '^[A-Za-z0-9]+$'   # Regex for valid team tags (only alphanumeric)
+
+# Blacklisted words (names and tags)
+blacklist:
+  banned-words:
+    - "admin"
+    - "moderator"
+    - "staff"
+    - "owner"
+    - "server"
+    - "mod"
+    - "helper"
+    - "support"
+  case-sensitive: false         # Whether the blacklist is case-sensitive (if false, "Admin" matches "admin")
+
+performance:
+  async-operations: true        # Whether to perform database operations asynchronously (recommended for performance)
+  cache-cleanup-delay: 60       # How often to cleanup cache (seconds)
+
+# Message configurations
+messages:
+  prefix: "&8[&bTeamChat&8]&r "
+  
+  # Success messages
+  team-created: "&aTeam created successfully!"
+  team-disbanded: "&aTeam disbanded."
+  player-invited: "&aInvite sent to &e{player}&a."
+  invite-received: "&aYou've been invited to join &e{team}&a! Use &6/team accept&a to join."
+  player-joined: "&e{player}&a joined the team!"
+  player-kicked: "&e{player}&a has been kicked from the team."
+  player-left: "&aYou left the team."
+  
+  # Error messages
+  already-in-team: "&cYou are already in a team!"
+  not-in-team: "&cYou are not in a team."
+  team-not-found: "&cTeam '&e{team}&c' not found."
+  player-not-found: "&cPlayer '&e{player}&c' is not online."
+  team-full: "&cThat team is full!"
+  not-owner: "&cOnly the team owner can do that."
+  invalid-name: "&cInvalid team name. Use only letters and numbers."
+  invalid-tag: "&cInvalid team tag. Use only letters and numbers."
+  name-too-long: "&cTeam name is too long (max {max} characters)."
+  tag-too-long: "&cTeam tag is too long (max {max} characters)."
+  banned-word: "&cThat word is not allowed in team names."
+  team-exists: "&cA team with that name or tag already exists."
+  no-pending-invite: "&cYou don't have any pending invites."
+  cannot-invite-self: "&cYou cannot invite yourself!"
+  already-invited: "&cThat player already has a pending invite."
+  
+  # Info messages
+  chat-mode-team: "&aTeam chat mode &eenabled&a."
+  chat-mode-global: "&aTeam chat mode &cdisabled&a."
+  config-reloaded: "&aConfiguration reloaded!"

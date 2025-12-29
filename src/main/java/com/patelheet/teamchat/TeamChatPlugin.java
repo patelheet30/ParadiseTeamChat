@@ -1,16 +1,19 @@
 package com.patelheet.teamchat;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import com.patelheet.teamchat.config.ConfigManager;
 
 /**
  * TeamChat Plugin - Main Class
- * High-performance team communication system for Paper servers
+ * High-performance and customisable team communication and management system
+ * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
  * @version 1.0.0
  */
 public class TeamChatPlugin extends JavaPlugin {
     private static TeamChatPlugin instance;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
@@ -19,6 +22,10 @@ public class TeamChatPlugin extends JavaPlugin {
         getLogger().info("TeamChat Plugin v" + getPluginMeta().getDescription() + " by patelheet30");
         getLogger().info("Loading...");
         getLogger().info("========================================");
+
+        configManager = new ConfigManager(this);
+        configManager.loadConfig();
+        getLogger().info("TeamChat plugin configuration added.");
 
         // Rest of the plugin initialisation code will go here
 
