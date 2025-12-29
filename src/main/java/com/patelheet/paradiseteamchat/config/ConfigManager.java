@@ -1,7 +1,8 @@
-package com.patelheet.teamchat.config;
+package com.patelheet.paradiseteamchat.config;
 
-import com.patelheet.teamchat.TeamChatPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
+
+import com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -12,7 +13,7 @@ import java.util.regex.PatternSyntaxException;
  * Loads config.yml, provides easy access to values, and handles validation.
  */
 public class ConfigManager {
-    private final TeamChatPlugin plugin;
+    private final ParadiseTeamChatPlugin plugin;
     private FileConfiguration config;
 
     private int maxMembers;
@@ -31,7 +32,7 @@ public class ConfigManager {
      * 
      * @param plugin The main plugin instance
      */
-    public ConfigManager(TeamChatPlugin plugin) {
+    public ConfigManager(ParadiseTeamChatPlugin plugin) {
         this.plugin = plugin;
     }
 

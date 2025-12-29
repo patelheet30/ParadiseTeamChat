@@ -1,4 +1,4 @@
-package com.patelheet.teamchat.models;
+package com.patelheet.paradiseteamchat.models;
 
 /**
  * Represents a player's membership in a team.

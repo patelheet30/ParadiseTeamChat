@@ -1,10 +1,10 @@
-name: TeamChat
+name: ParadiseTeamChat
 version: 1.0.0
-main: com.patelheet.teamchat.TeamChatPlugin
+main: com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin
 description: High-performance team communication plugin for Paper servers
 authors:
   - Heet Patel
-website: https://github.com/patelheet30/teamchat
+website: https://github.com/patelheet30/ParadiseTeamChat
 
 api-version: '1.21'
 loader: PAPER

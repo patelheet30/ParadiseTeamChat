@@ -1,46 +1,47 @@
-package com.patelheet.teamchat;
+package com.patelheet.paradiseteamchat;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import com.patelheet.teamchat.config.ConfigManager;
+
+import com.patelheet.paradiseteamchat.config.ConfigManager;
 
 /**
- * TeamChat Plugin - Main Class
+ * ParadiseTeamChat Plugin - Main Class
  * High-performance and customisable team communication and management system
  * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
  * @version 1.0.0
  */
-public class TeamChatPlugin extends JavaPlugin {
-    private static TeamChatPlugin instance;
+public class ParadiseTeamChatPlugin extends JavaPlugin {
+    private static ParadiseTeamChatPlugin instance;
     private ConfigManager configManager;
 
     @Override
     public void onEnable() {
         instance = this;
         getLogger().info("========================================");
-        getLogger().info("TeamChat Plugin v" + getPluginMeta().getDescription() + " by patelheet30");
+        getLogger().info("ParadiseTeamChat Plugin v" + getPluginMeta().getDescription() + " by patelheet30");
         getLogger().info("Loading...");
         getLogger().info("========================================");
 
         configManager = new ConfigManager(this);
         configManager.loadConfig();
-        getLogger().info("TeamChat plugin configuration added.");
+        getLogger().info("ParadiseTeamChat plugin configuration added.");
 
         // Rest of the plugin initialisation code will go here
 
-        getLogger().info("TeamChat Plugin enabled successfully!");
+        getLogger().info("ParadiseTeamChat Plugin enabled successfully!");
     }
 
     @Override
     public void onDisable() {
         getLogger().info("========================================");
-        getLogger().info("TeamChat Plugin shutting down...");
+        getLogger().info("ParadiseTeamChat Plugin shutting down...");
         getLogger().info("========================================");
 
         // Any necessary cleanup code will go here
 
-        getLogger().info("TeamChat Plugin disabled successfully!");
+        getLogger().info("ParadiseTeamChat Plugin disabled successfully!");
     }
 
     /**
@@ -48,7 +49,7 @@ public class TeamChatPlugin extends JavaPlugin {
      * 
      * @return The plugin instance
      */
-    public static TeamChatPlugin getInstance() {
+    public static ParadiseTeamChatPlugin getInstance() {
         return instance;
     }
 }

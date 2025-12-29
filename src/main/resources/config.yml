@@ -1,4 +1,4 @@
-# TeamChat Plugin Configuration
+# ParadiseTeamChat Plugin Configuration
 
 # Team settings
 team:
@@ -27,7 +27,7 @@ performance:
 
 # Message configurations
 messages:
-  prefix: "&8[&bTeamChat&8]&r "
+  prefix: "&8[&bParadiseTeamChat&8]&r "
   
   # Success messages
   team-created: "&aTeam created successfully!"

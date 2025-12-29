@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.patelheet</groupId>
-    <artifactId>teamchat</artifactId>
+    <artifactId>paradiseteamchat</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>TeamChat</name>
+    <name>ParadiseTeamChat</name>
     <description>High-performance team communication plugin for Paper servers</description>
 
     <properties>

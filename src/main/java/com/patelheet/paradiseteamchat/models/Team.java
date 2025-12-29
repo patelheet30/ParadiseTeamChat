@@ -1,10 +1,10 @@
-package com.patelheet.teamchat.models;
+package com.patelheet.paradiseteamchat.models;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a team in the TeamChat plugin.
+ * Represents a team in the ParadiseTeamChat plugin.
  * This is a pure data model - contains only data and basic getters/setters.
  */
 public class Team {
