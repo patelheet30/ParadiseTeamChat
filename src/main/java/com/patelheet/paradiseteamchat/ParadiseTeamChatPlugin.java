@@ -3,6 +3,8 @@ package com.patelheet.paradiseteamchat;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.patelheet.paradiseteamchat.config.ConfigManager;
+import com.patelheet.paradiseteamchat.database.DatabaseManager;
+import com.patelheet.paradiseteamchat.database.TeamRepository;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -15,6 +17,8 @@ import com.patelheet.paradiseteamchat.config.ConfigManager;
 public class ParadiseTeamChatPlugin extends JavaPlugin {
     private static ParadiseTeamChatPlugin instance;
     private ConfigManager configManager;
+    private DatabaseManager databaseManager;
+    private TeamRepository teamRepository;
 
     @Override
     public void onEnable() {
@@ -28,6 +32,13 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         configManager.loadConfig();
         getLogger().info("ParadiseTeamChat plugin configuration added.");
 
+        databaseManager = new DatabaseManager(this);
+        databaseManager.initialise();
+        getLogger().info("ParadiseTeamChat plugin database initialised.");
+
+        teamRepository = new TeamRepository(this, databaseManager);
+        getLogger().info("ParadiseTeamChat plugin team repository initialised.");
+
         // Rest of the plugin initialisation code will go here
 
         getLogger().info("ParadiseTeamChat Plugin enabled successfully!");
@@ -39,6 +50,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         getLogger().info("ParadiseTeamChat Plugin shutting down...");
         getLogger().info("========================================");
 
+        if (databaseManager != null) {
+            databaseManager.close();
+            getLogger().info("ParadiseTeamChat plugin database connection closed.");
+        }
         // Any necessary cleanup code will go here
 
         getLogger().info("ParadiseTeamChat Plugin disabled successfully!");
@@ -51,5 +66,17 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
      */
     public static ParadiseTeamChatPlugin getInstance() {
         return instance;
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
+
+    public TeamRepository getTeamRepository() {
+        return teamRepository;
     }
 }
