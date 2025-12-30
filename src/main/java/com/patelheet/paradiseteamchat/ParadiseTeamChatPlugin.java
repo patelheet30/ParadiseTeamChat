@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
+import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
+import com.patelheet.paradiseteamchat.managers.CacheManager;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -19,6 +21,8 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private ConfigManager configManager;
     private DatabaseManager databaseManager;
     private TeamRepository teamRepository;
+    private CacheManager cacheManager;
+    private AsyncTaskManager asyncTaskManager;
 
     @Override
     public void onEnable() {
@@ -39,6 +43,12 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         teamRepository = new TeamRepository(this, databaseManager);
         getLogger().info("ParadiseTeamChat plugin team repository initialised.");
 
+        cacheManager = new CacheManager(this);
+        getLogger().info("ParadiseTeamChat plugin cache manager initialised.");
+
+        asyncTaskManager = new AsyncTaskManager(this);
+        getLogger().info("ParadiseTeamChat plugin async task manager initialised.");
+
         // Rest of the plugin initialisation code will go here
 
         getLogger().info("ParadiseTeamChat Plugin enabled successfully!");
@@ -49,6 +59,16 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         getLogger().info("========================================");
         getLogger().info("ParadiseTeamChat Plugin shutting down...");
         getLogger().info("========================================");
+
+        if (asyncTaskManager != null) {
+            asyncTaskManager.cancelAllTasks();
+            getLogger().info("ParadiseTeamChat plugin async task manager shut down.");
+        }
+
+        if (cacheManager != null) {
+            cacheManager.clearAll();
+            getLogger().info("ParadiseTeamChat plugin cache cleared.");
+        }
 
         if (databaseManager != null) {
             databaseManager.close();
@@ -78,5 +98,13 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public TeamRepository getTeamRepository() {
         return teamRepository;
+    }
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
+    }
+
+    public AsyncTaskManager getAsyncTaskManager() {
+        return asyncTaskManager;
     }
 }
