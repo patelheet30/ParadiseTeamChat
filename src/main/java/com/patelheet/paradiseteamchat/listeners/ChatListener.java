@@ -11,6 +11,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
  * Listener to handle player chat events and route messages based on chat mode
@@ -72,14 +74,32 @@ public class ChatListener implements Listener {
 
         Player player = event.getPlayer();
         String playerName = player.getName().toLowerCase();
-
         ChatMode mode = chatModeManager.getChatMode(playerName);
 
-        // If in GLOBAL mode, let the event proceed normally
+        // If in GLOBAL mode, format the message with the Team Tag
         if (mode == ChatMode.GLOBAL) {
+            Team team = plugin.getCacheManager().getPlayerTeam(playerName);
+
+            event.renderer((source, sourceDisplayName, message, viewer) -> {
+                Component formattedName;
+
+                if (team != null) {
+                    // Format: [TAG] PlayerName
+                    String tagPrefix = "§8[§b" + team.getTag() + "§8]§r ";
+                    formattedName = LegacyComponentSerializer.legacySection().deserialize(tagPrefix)
+                            .append(sourceDisplayName);
+                } else {
+                    formattedName = sourceDisplayName;
+                }
+
+                return formattedName
+                        .append(Component.text("§7: §f"))
+                        .append(message);
+            });
             return;
         }
 
+        // Handle Team Chat (if mode is TEAM)
         handleTeamChat(event, player, playerName);
     }
 
