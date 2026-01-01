@@ -9,12 +9,14 @@ import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
 import com.patelheet.paradiseteamchat.listeners.ChatListener;
+import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
 import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
 import com.patelheet.paradiseteamchat.managers.CacheManager;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.InviteManager;
 import com.patelheet.paradiseteamchat.utils.InputValidator;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
+import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -122,8 +124,8 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     }
 
     private void registerListeners() {
-        ChatListener chatListener = new ChatListener(this);
-        getServer().getPluginManager().registerEvents(chatListener, this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerSessionListener(this), this);
     }
 
     /**
