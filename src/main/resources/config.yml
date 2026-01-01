@@ -45,6 +45,7 @@ messages:
   player-left: "&aYou left the team."
   
   # Error messages
+  no-permission: "&cYou don't have permission to use this command."
   already-in-team: "&cYou are already in a team!"
   not-in-team: "&cYou are not in a team."
   team-not-found: "&cTeam '&e{team}&c' not found."
