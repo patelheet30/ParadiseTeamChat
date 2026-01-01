@@ -68,12 +68,12 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         inviteManager = new InviteManager(this);
         getLogger().info("ParadiseTeamChat plugin invite manager initialised.");
 
-        registerCommands();
-        getLogger().info("ParadiseTeamChat plugin commands registered.");
-
         chatModeManager = new ChatModeManager(this);
         chatModeManager.initialise();
         getLogger().info("ParadiseTeamChat plugin chat mode manager initialised.");
+
+        registerCommands();
+        getLogger().info("ParadiseTeamChat plugin commands registered.");
 
         registerListeners();
         getLogger().info("ParadiseTeamChat plugin listeners registered.");
