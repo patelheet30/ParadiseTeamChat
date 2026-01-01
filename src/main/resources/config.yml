@@ -33,7 +33,7 @@ performance:
 
 # Message configurations
 messages:
-  prefix: "&8[&bParadiseTeamChat&8]&r "
+  prefix: "&8[&bPTC&8]&r "
   
   # Success messages
   team-created: "&aTeam created successfully!"
