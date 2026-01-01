@@ -99,6 +99,9 @@ public class TeamKickCommand extends BaseCommand implements TabCompleter {
                     // Unload kicked player's team cache
                     plugin.getCacheManager().unloadPlayerTeam(targetLower);
 
+                    // Force kicked player to GLOBAL chat mode
+                    plugin.getChatModeManager().forceGlobalMode(targetLower);
+
                     // Notify sender
                     player.sendMessage(configManager.getMessage("player-kicked", "{player}", targetName));
 

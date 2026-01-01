@@ -84,6 +84,17 @@ public class TeamDisbandCommand extends BaseCommand {
                     // Clear all invites related to the team
                     plugin.getInviteManager().clearAllInvitesForTeam(teamId);
 
+                    for (String memberName : team.getMembers()) {
+                        plugin.getChatModeManager().forceGlobalMode(memberName);
+
+                        // Notify online members about chat mode change
+                        Player member = Bukkit.getPlayerExact(memberName);
+                        if (member != null && member.isOnline()) {
+                            member.sendMessage(configManager.getMessage("team-disbanded"));
+                            member.sendMessage("§eChat mode switched to GLOBAL.");
+                        }
+                    }
+
                     plugin.getLogger().info("Team '" + teamName + "' disbanded by " + player.getName());
                 } else {
                     player.sendMessage("§cFailed to disband team. Please try again.");

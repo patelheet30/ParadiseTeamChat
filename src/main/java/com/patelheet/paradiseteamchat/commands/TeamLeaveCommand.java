@@ -80,6 +80,9 @@ public class TeamLeaveCommand extends BaseCommand {
                     // Notify player and team members
                     player.sendMessage(configManager.getMessage("player-left"));
 
+                    // Force player to GLOBAL chat mode
+                    plugin.getChatModeManager().forceGlobalMode(playerName);
+
                     String notification = "§e" + player.getName() + " §7has left the team.";
                     for (String memberName : team.getMembers()) {
                         Player member = Bukkit.getPlayerExact(memberName);
