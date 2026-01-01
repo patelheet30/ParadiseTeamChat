@@ -7,6 +7,8 @@ import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
 import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
 import com.patelheet.paradiseteamchat.managers.CacheManager;
+import com.patelheet.paradiseteamchat.managers.InviteManager;
+import com.patelheet.paradiseteamchat.utils.InputValidator;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -23,6 +25,8 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private TeamRepository teamRepository;
     private CacheManager cacheManager;
     private AsyncTaskManager asyncTaskManager;
+    private InputValidator inputValidator;
+    private InviteManager inviteManager;
 
     @Override
     public void onEnable() {
@@ -48,6 +52,12 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
         asyncTaskManager = new AsyncTaskManager(this);
         getLogger().info("ParadiseTeamChat plugin async task manager initialised.");
+
+        inputValidator = new InputValidator(this);
+        getLogger().info("ParadiseTeamChat plugin input validator initialised.");
+
+        inviteManager = new InviteManager(this);
+        getLogger().info("ParadiseTeamChat plugin invite manager initialised.");
 
         // Rest of the plugin initialisation code will go here
 
@@ -106,5 +116,13 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public AsyncTaskManager getAsyncTaskManager() {
         return asyncTaskManager;
+    }
+
+    public InputValidator getInputValidator() {
+        return inputValidator;
+    }
+
+    public InviteManager getInviteManager() {
+        return inviteManager;
     }
 }
