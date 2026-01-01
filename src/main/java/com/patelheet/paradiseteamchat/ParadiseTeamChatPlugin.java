@@ -2,14 +2,19 @@ package com.patelheet.paradiseteamchat;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.patelheet.paradiseteamchat.commands.GlobalChatCommand;
+import com.patelheet.paradiseteamchat.commands.TeamChatCommand;
 import com.patelheet.paradiseteamchat.commands.TeamCommand;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
+import com.patelheet.paradiseteamchat.listeners.ChatListener;
 import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
 import com.patelheet.paradiseteamchat.managers.CacheManager;
+import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.InviteManager;
 import com.patelheet.paradiseteamchat.utils.InputValidator;
+import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -28,6 +33,7 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private AsyncTaskManager asyncTaskManager;
     private InputValidator inputValidator;
     private InviteManager inviteManager;
+    private ChatModeManager chatModeManager;
 
     @Override
     public void onEnable() {
@@ -62,6 +68,13 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
         registerCommands();
         getLogger().info("ParadiseTeamChat plugin commands registered.");
+
+        chatModeManager = new ChatModeManager(this);
+        chatModeManager.initialise();
+        getLogger().info("ParadiseTeamChat plugin chat mode manager initialised.");
+
+        registerListeners();
+        getLogger().info("ParadiseTeamChat plugin listeners registered.");
 
         // Rest of the plugin initialisation code will go here
 
@@ -100,6 +113,17 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         TeamCommand teamCommand = new TeamCommand(this);
         getCommand("team").setExecutor(teamCommand);
         getCommand("team").setTabCompleter(teamCommand);
+
+        TeamChatCommand teamChatCommand = new TeamChatCommand(this);
+        getCommand("teamchat").setExecutor(teamChatCommand);
+
+        GlobalChatCommand globalChatCommand = new GlobalChatCommand(this);
+        getCommand("globalchat").setExecutor(globalChatCommand);
+    }
+
+    private void registerListeners() {
+        ChatListener chatListener = new ChatListener(this);
+        getServer().getPluginManager().registerEvents(chatListener, this);
     }
 
     /**
@@ -137,5 +161,9 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public InviteManager getInviteManager() {
         return inviteManager;
+    }
+
+    public ChatModeManager getChatModeManager() {
+        return chatModeManager;
     }
 }
