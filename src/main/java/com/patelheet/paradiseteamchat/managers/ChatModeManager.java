@@ -2,8 +2,13 @@ package com.patelheet.paradiseteamchat.managers;
 
 import com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Manager to handle player chat modes (GLOBAL or TEAM).
@@ -16,6 +21,8 @@ public class ChatModeManager {
 
     // Map to track each player's chat mode
     private final Map<String, ChatMode> playerChatModes;
+
+    private BukkitTask cleanupTask;
 
     /**
      * Enum representing the two possible chat modes.
@@ -39,7 +46,51 @@ public class ChatModeManager {
      * Initialises the ChatModeManager. Placeholder for future setup logic.
      */
     public void initialise() {
-        plugin.getLogger().info("ChatModeManager initialized successfully.");
+        // Start periodic cleanup task (runs every 60 seconds by default)
+        int cleanupDelay = plugin.getConfigManager().getCacheCleanupDelay();
+        long delayTicks = cleanupDelay * 20L; // Convert seconds to ticks
+
+        cleanupTask = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            performCleanup();
+        }, delayTicks, delayTicks);
+
+        plugin.getLogger()
+                .info("ChatModeManager initialized with cleanup task running every " + cleanupDelay + " seconds.");
+    }
+
+    /**
+     * Performs periodic cleanup of chat modes to remove entries for offline
+     * players.
+     */
+    private void performCleanup() {
+        int modesRemoved = 0;
+
+        Iterator<Map.Entry<String, ChatMode>> iterator = playerChatModes.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, ChatMode> entry = iterator.next();
+            String playerName = entry.getKey();
+
+            Player player = Bukkit.getPlayerExact(playerName);
+            if (player == null || !player.isOnline()) {
+                iterator.remove();
+                modesRemoved++;
+            }
+        }
+
+        // Log cleanup results if anything was removed
+        if (modesRemoved > 0) {
+            plugin.getLogger().info("Chat mode cleanup: Removed " + modesRemoved + " offline player entries.");
+        }
+    }
+
+    /**
+     * Shuts down the ChatModeManager, stopping any ongoing tasks.
+     */
+    public void shutdown() {
+        if (cleanupTask != null) {
+            cleanupTask.cancel();
+            plugin.getLogger().info("Chat mode cleanup task stopped.");
+        }
     }
 
     /**

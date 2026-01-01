@@ -5,6 +5,11 @@ import com.patelheet.paradiseteamchat.models.Team;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Iterator;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Manages caching of teams and invites to provide quick access and reduce
@@ -20,6 +25,8 @@ public class CacheManager {
     // Maps Player Name Strings to Team Invite IDs for managing pending invites
     private final Map<String, Integer> pendingInvites;
 
+    private BukkitTask cleanupTask;
+
     /**
      * Constructor for CacheManager.
      * 
@@ -32,13 +39,86 @@ public class CacheManager {
         this.playerTeamCache = new ConcurrentHashMap<>();
         this.teamIdCache = new ConcurrentHashMap<>();
         this.pendingInvites = new ConcurrentHashMap<>();
+
     }
 
     /**
-     * Placeholder initialise method for future cache setup logic.
+     * Initialises the CacheManager, starting periodic cleanup tasks.
      */
     public void initialise() {
-        plugin.getLogger().info("CacheManager initialised.");
+        int cleanupDelay = plugin.getConfigManager().getCacheCleanupDelay();
+        long delayTicks = cleanupDelay * 20L; // Convert seconds to ticks
+
+        cleanupTask = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            performCleanup();
+        }, delayTicks, delayTicks);
+
+        plugin.getLogger()
+                .info("CacheManager initialised with cleanup task running every " + cleanupDelay + " seconds.");
+    }
+
+    /**
+     * Performs periodic cleanup of the caches to remove stale data.
+     */
+    private void performCleanup() {
+        int teamsRemoved = 0;
+        int invitesRemoved = 0;
+
+        // Clean up teams with no online members
+        Iterator<Map.Entry<Integer, Team>> teamIterator = teamIdCache.entrySet().iterator();
+        while (teamIterator.hasNext()) {
+            Map.Entry<Integer, Team> entry = teamIterator.next();
+            Team team = entry.getValue();
+
+            // Check if any team member is online
+            boolean hasOnlineMembers = false;
+            for (String memberName : team.getMembers()) {
+                Player member = Bukkit.getPlayerExact(memberName);
+                if (member != null && member.isOnline()) {
+                    hasOnlineMembers = true;
+                    break;
+                }
+            }
+
+            // Remove team if no members are online
+            if (!hasOnlineMembers) {
+                teamIterator.remove();
+                // Also remove from player cache
+                for (String memberName : team.getMembers()) {
+                    playerTeamCache.remove(memberName);
+                }
+                teamsRemoved++;
+            }
+        }
+
+        // Clean up invites for offline players
+        Iterator<Map.Entry<String, Integer>> inviteIterator = pendingInvites.entrySet().iterator();
+        while (inviteIterator.hasNext()) {
+            Map.Entry<String, Integer> entry = inviteIterator.next();
+            String playerName = entry.getKey();
+
+            Player player = Bukkit.getPlayerExact(playerName);
+            if (player == null || !player.isOnline()) {
+                inviteIterator.remove();
+                invitesRemoved++;
+            }
+        }
+
+        // Log cleanup results if anything was removed
+        if (teamsRemoved > 0 || invitesRemoved > 0) {
+            plugin.getLogger()
+                    .info("Cache cleanup: Removed " + teamsRemoved + " teams and " + invitesRemoved + " invites.");
+        }
+    }
+
+    /**
+     * Shuts down the CacheManager, stopping any ongoing tasks.
+     */
+    public void shutdown() {
+        if (cleanupTask != null) {
+            cleanupTask.cancel();
+            plugin.getLogger().info("Cache cleanup task stopped.");
+        }
     }
 
     /**

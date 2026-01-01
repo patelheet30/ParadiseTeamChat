@@ -45,8 +45,9 @@ public class InviteManager {
         }
 
         // Verify team is not full
-        if (!team.isFull()) {
+        if (team.isFull()) {
             sender.sendMessage(configManager.getMessage("team-full"));
+            return false;
         }
 
         // Verify target player exists and is online
@@ -129,6 +130,12 @@ public class InviteManager {
                         cacheManager.loadPlayerTeam(playerName, resultTeam);
 
                         cacheManager.clearInvite(playerName);
+
+                        if (resultTeam.isFull()) {
+                            clearAllInvitesForTeam(resultTeam.getId());
+                            plugin.getLogger().info(
+                                    "Team " + resultTeam.getName() + " is now full - cleared all pending invites.");
+                        }
 
                         player.sendMessage(configManager.getMessage("player-joined", "{player}", player.getName()));
 

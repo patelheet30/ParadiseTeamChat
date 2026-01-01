@@ -95,6 +95,7 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         }
 
         if (cacheManager != null) {
+            cacheManager.shutdown();
             cacheManager.clearAll();
             getLogger().info("ParadiseTeamChat plugin cache cleared.");
         }
@@ -102,6 +103,11 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         if (databaseManager != null) {
             databaseManager.close();
             getLogger().info("ParadiseTeamChat plugin database connection closed.");
+        }
+
+        if (chatModeManager != null) {
+            chatModeManager.shutdown();
+            getLogger().info("ParadiseTeamChat plugin chat mode manager shut down.");
         }
         // Any necessary cleanup code will go here
 
