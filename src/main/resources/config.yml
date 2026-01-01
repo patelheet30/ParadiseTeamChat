@@ -25,6 +25,12 @@ blacklist:
     - "paradise"
     - "chat"
     - "null"
+    - "teamchat"
+    - "ptc"
+    - "paradiseteamchat"
+    - "globalchat"
+    - "tc"
+    - "gc"
   case-sensitive: false         # Whether the blacklist is case-sensitive (if false, "Admin" matches "admin")
 
 performance:
