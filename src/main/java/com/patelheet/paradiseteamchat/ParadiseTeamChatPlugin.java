@@ -24,7 +24,7 @@ import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
  * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
- * @version 1.0.1
+ * @version 1.1.0
  */
 public class ParadiseTeamChatPlugin extends JavaPlugin {
     private static ParadiseTeamChatPlugin instance;
