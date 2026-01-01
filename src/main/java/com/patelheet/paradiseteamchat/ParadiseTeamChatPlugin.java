@@ -2,6 +2,7 @@ package com.patelheet.paradiseteamchat;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.patelheet.paradiseteamchat.commands.TeamCommand;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
@@ -59,6 +60,9 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         inviteManager = new InviteManager(this);
         getLogger().info("ParadiseTeamChat plugin invite manager initialised.");
 
+        registerCommands();
+        getLogger().info("ParadiseTeamChat plugin commands registered.");
+
         // Rest of the plugin initialisation code will go here
 
         getLogger().info("ParadiseTeamChat Plugin enabled successfully!");
@@ -87,6 +91,15 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         // Any necessary cleanup code will go here
 
         getLogger().info("ParadiseTeamChat Plugin disabled successfully!");
+    }
+
+    /**
+     * Register commands and their executors
+     */
+    private void registerCommands() {
+        TeamCommand teamCommand = new TeamCommand(this);
+        getCommand("team").setExecutor(teamCommand);
+        getCommand("team").setTabCompleter(teamCommand);
     }
 
     /**
