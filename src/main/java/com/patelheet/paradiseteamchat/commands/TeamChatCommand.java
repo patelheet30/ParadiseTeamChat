@@ -93,9 +93,8 @@ public class TeamChatCommand implements CommandExecutor {
      * @param message    The message to be sent
      */
     private void sendQuickTeamMessage(Player player, String playerName, Team team, String message) {
-        String tag = team.getTag();
         String playerDisplayName = player.getName();
-        String formattedMessage = "§8[§b" + tag + "§8]§r " + playerDisplayName + "§7: §f" + message;
+        String formattedMessage = "§8[§aTC§8]§r " + playerDisplayName + "§7: §f" + message;
 
         // Send to all online team members
         for (String memberName : team.getMembers()) {

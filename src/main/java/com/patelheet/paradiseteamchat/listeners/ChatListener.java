@@ -46,8 +46,8 @@ public class ChatListener implements Listener {
         String tag = team.getTag();
         String playerDisplayName = player.getName();
 
-        // Format: §8[§bTAG§8]§r PlayerName§7: §fmessage
-        return "§8[§b" + tag + "§8]§r " + playerDisplayName + "§7: §f" + message;
+        // Format: [TC] PlayerName: message
+        return "§8[§aTC§8]§r " + playerDisplayName + "§7: §f" + message;
     }
 
     /**
