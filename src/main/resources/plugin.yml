@@ -1,8 +1,8 @@
 name: ParadiseTeamChat
-version: 1.0.0
+version: 1.0.1
 main: com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin
 description: High-performance team communication plugin for Paper servers
-api-version: 1.21
+api-version: '1.21'
 authors: [Heet Patel]
 website: https://github.com/patelheet30/ParadiseTeamChat
 
@@ -11,13 +11,11 @@ commands:
     description: Manage your team
     usage: /team <create|disband|invite|kick|accept|leave|info|help>
     aliases: [t]
-    permission: teamchat.team.use
     
   teamchat:
     description: Toggle team chat or send a quick message
     usage: /teamchat [message]
     aliases: [tc]
-    permission: teamchat.chat.team
     
   globalchat:
     description: Switch to global chat or send a quick message
@@ -28,7 +26,6 @@ commands:
     description: Admin commands for managing teams
     usage: /teamadmin <delete|info|list|reload> [args]
     aliases: [ta]
-    permission: teamchat.admin
 
 permissions:
   teamchat.team.use:
