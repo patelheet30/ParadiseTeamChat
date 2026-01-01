@@ -19,6 +19,12 @@ blacklist:
     - "mod"
     - "helper"
     - "support"
+    - "unknown"
+    - "team"
+    - "guild"
+    - "paradise"
+    - "chat"
+    - "null"
   case-sensitive: false         # Whether the blacklist is case-sensitive (if false, "Admin" matches "admin")
 
 performance:
