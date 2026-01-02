@@ -69,8 +69,6 @@ public class DatabaseManager {
                             "member_limit INTEGER NOT NULL" +
                             ");");
 
-            plugin.getLogger().info("Created 'teams' table.");
-
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS team_members (" +
                             "team_id INTEGER NOT NULL," +
@@ -79,8 +77,6 @@ public class DatabaseManager {
                             "PRIMARY KEY (team_id, player_name)," +
                             "FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE" +
                             ");");
-
-            plugin.getLogger().info("Created 'team_members' table.");
 
             stmt.execute(
                     "CREATE INDEX IF NOT EXISTS idx_members_name " +
@@ -93,8 +89,6 @@ public class DatabaseManager {
             stmt.execute(
                     "CREATE INDEX IF NOT EXISTS idx_teams_name_lower " +
                             "ON teams(name_lower);");
-
-            plugin.getLogger().info("Database indexes created/verified.");
         }
     }
 

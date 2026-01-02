@@ -1,5 +1,6 @@
 package com.patelheet.paradiseteamchat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.patelheet.paradiseteamchat.commands.GlobalChatCommand;
@@ -8,6 +9,7 @@ import com.patelheet.paradiseteamchat.commands.TeamCommand;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
+import com.patelheet.paradiseteamchat.integrations.TeamChatExpansion;
 import com.patelheet.paradiseteamchat.listeners.ChatListener;
 import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
 import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
@@ -15,8 +17,6 @@ import com.patelheet.paradiseteamchat.managers.CacheManager;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.InviteManager;
 import com.patelheet.paradiseteamchat.utils.InputValidator;
-import com.patelheet.paradiseteamchat.managers.ChatModeManager;
-import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -36,12 +36,14 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private InputValidator inputValidator;
     private InviteManager inviteManager;
     private ChatModeManager chatModeManager;
+    private TeamChatExpansion placeholderExpansion;
 
     @Override
     public void onEnable() {
         instance = this;
         getLogger().info("========================================");
-        getLogger().info("ParadiseTeamChat Plugin v" + getPluginMeta().getDescription() + " by patelheet30");
+        getLogger().info("ParadiseTeamChat Plugin v" + getPluginMeta().getVersion() + " by patelheet30");
+        getLogger().info(getPluginMeta().getDescription());
         getLogger().info("Loading...");
         getLogger().info("========================================");
 
@@ -71,6 +73,14 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         chatModeManager = new ChatModeManager(this);
         chatModeManager.initialise();
         getLogger().info("ParadiseTeamChat plugin chat mode manager initialised.");
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            placeholderExpansion = new TeamChatExpansion(this);
+            placeholderExpansion.register();
+            getLogger().info("PlaceholderAPI integration enabled!");
+        } else {
+            getLogger().warning("PlaceholderAPI not found - placeholders will not work!");
+        }
 
         registerCommands();
         getLogger().info("ParadiseTeamChat plugin commands registered.");
@@ -109,6 +119,11 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
             chatModeManager.shutdown();
             getLogger().info("ParadiseTeamChat plugin chat mode manager shut down.");
         }
+
+        if (placeholderExpansion != null) {
+            placeholderExpansion.unregister();
+        }
+
         // Any necessary cleanup code will go here
 
         getLogger().info("ParadiseTeamChat Plugin disabled successfully!");

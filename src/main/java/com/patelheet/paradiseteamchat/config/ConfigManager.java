@@ -53,8 +53,6 @@ public class ConfigManager {
 
         // Validate loaded values.
         validateConfig();
-
-        plugin.getLogger().info("Configuration loaded successfully!");
     }
 
     /**
