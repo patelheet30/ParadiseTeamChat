@@ -49,11 +49,11 @@ public class PlayerSessionListener implements Listener {
                 if (team != null) {
                     // Player is in a team - load into cache
                     plugin.getCacheManager().loadPlayerTeam(playerName, team);
-                    plugin.getLogger().info("Loaded team '" + team.getName() + "' for player " + player.getName());
+                    plugin.logDebug("Loaded team '" + team.getName() + "' for player " + player.getName());
                 } else {
                     // Player is not in a team - ensure cache is clear
                     plugin.getCacheManager().loadPlayerTeam(playerName, null);
-                    plugin.getLogger().info("Player " + player.getName() + " is not in a team.");
+                    plugin.logDebug("Player " + player.getName() + " is not in a team.");
                 }
 
                 // Check for pending invites
@@ -99,6 +99,6 @@ public class PlayerSessionListener implements Listener {
         // Remove from chat mode map
         plugin.getChatModeManager().removePlayer(playerName);
 
-        plugin.getLogger().info("Cleaned up session data for player " + player.getName());
+        plugin.logDebug("Cleaned up session data for player " + player.getName());
     }
 }

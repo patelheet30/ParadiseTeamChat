@@ -122,7 +122,7 @@ public class TeamKickCommand extends BaseCommand implements TabCompleter {
                         }
                     }
 
-                    plugin.getLogger().info(playerName + " kicked " + targetLower + " from team " + team.getName());
+                    plugin.logDebug(playerName + " kicked " + targetLower + " from team " + team.getName());
                 } else {
                     player.sendMessage("§cFailed to kick player. Please try again.");
                 }

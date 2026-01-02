@@ -91,7 +91,7 @@ public class TeamLeaveCommand extends BaseCommand {
                         }
                     }
 
-                    plugin.getLogger().info(player.getName() + " left team " + teamName);
+                    plugin.logDebug(player.getName() + " left team " + teamName);
                 } else {
                     player.sendMessage("§cFailed to leave team. Please try again.");
                 }

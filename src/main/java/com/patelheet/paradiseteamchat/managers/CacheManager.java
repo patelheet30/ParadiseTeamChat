@@ -53,8 +53,7 @@ public class CacheManager {
             performCleanup();
         }, delayTicks, delayTicks);
 
-        plugin.getLogger()
-                .info("CacheManager initialised with cleanup task running every " + cleanupDelay + " seconds.");
+        plugin.logDebug("CacheManager initialised with cleanup task running every " + cleanupDelay + " seconds.");
     }
 
     /**
@@ -106,8 +105,7 @@ public class CacheManager {
 
         // Log cleanup results if anything was removed
         if (teamsRemoved > 0 || invitesRemoved > 0) {
-            plugin.getLogger()
-                    .info("Cache cleanup: Removed " + teamsRemoved + " teams and " + invitesRemoved + " invites.");
+            plugin.logDebug("Cache cleanup: Removed " + teamsRemoved + " teams and " + invitesRemoved + " invites.");
         }
     }
 
@@ -117,7 +115,7 @@ public class CacheManager {
     public void shutdown() {
         if (cleanupTask != null) {
             cleanupTask.cancel();
-            plugin.getLogger().info("Cache cleanup task stopped.");
+            plugin.logDebug("Cache cleanup task stopped.");
         }
     }
 
@@ -134,10 +132,10 @@ public class CacheManager {
             playerTeamCache.put(lowerName, team);
             teamIdCache.put(team.getId(), team);
 
-            plugin.getLogger().info("Loaded team '" + team.getName() + "' into cache for player " + playerName + ".");
+            plugin.logDebug("Loaded team '" + team.getName() + "' into cache for player " + playerName + ".");
         } else {
             playerTeamCache.remove(lowerName);
-            plugin.getLogger().info("Removed team cache for player " + playerName + ".");
+            plugin.logDebug("Removed team cache for player " + playerName + ".");
         }
     }
 
@@ -164,10 +162,10 @@ public class CacheManager {
 
             if (!hasOtherOnlineMembers) {
                 teamIdCache.remove(team.getId());
-                plugin.getLogger().info("Team '" + team.getName() + "' unloaded from cache (no online members).");
+                plugin.logDebug("Team '" + team.getName() + "' unloaded from cache (no online members).");
             }
 
-            plugin.getLogger().info("Unloaded player '" + playerName + "' from cache.");
+            plugin.logDebug("Unloaded player '" + playerName + "' from cache.");
         }
     }
 
@@ -203,7 +201,7 @@ public class CacheManager {
             playerTeamCache.put(member, team);
         }
 
-        plugin.getLogger().info("Updated cache for team '" + team.getName() + "'.");
+        plugin.logDebug("Updated cache for team '" + team.getName() + "'.");
     }
 
     /**
@@ -219,7 +217,7 @@ public class CacheManager {
                 playerTeamCache.remove(member);
             }
 
-            plugin.getLogger().info("Invalidated cache for team '" + team.getName() + "'.");
+            plugin.logDebug("Invalidated cache for team '" + team.getName() + "'.");
         }
     }
 
@@ -232,7 +230,7 @@ public class CacheManager {
     public void addInvite(String playerName, int teamId) {
         String lowerName = playerName.toLowerCase();
         pendingInvites.put(lowerName, teamId);
-        plugin.getLogger().info("Invite cached: " + playerName + " -> Team ID " + teamId);
+        plugin.logDebug("Invite cached: " + playerName + " -> Team ID " + teamId);
     }
 
     /**
@@ -266,8 +264,7 @@ public class CacheManager {
         Integer teamId = pendingInvites.remove(lowerName);
 
         if (teamId != null) {
-            plugin.getLogger()
-                    .info("Cleared invite for player '" + playerName + "' (was invited to team ID " + teamId + ").");
+            plugin.logDebug("Cleared invite for player '" + playerName + "' (was invited to team ID " + teamId + ").");
         }
     }
 
@@ -279,7 +276,7 @@ public class CacheManager {
      */
     public void clearInvitesForTeam(int teamId) {
         pendingInvites.entrySet().removeIf(entry -> entry.getValue().equals(teamId));
-        plugin.getLogger().info("Cleared all pending invites for team ID " + teamId);
+        plugin.logDebug("Cleared all pending invites for team ID " + teamId);
     }
 
     /**
@@ -319,6 +316,6 @@ public class CacheManager {
         playerTeamCache.clear();
         teamIdCache.clear();
         pendingInvites.clear();
-        plugin.getLogger().info("All caches cleared.");
+        plugin.logDebug("All caches cleared.");
     }
 }

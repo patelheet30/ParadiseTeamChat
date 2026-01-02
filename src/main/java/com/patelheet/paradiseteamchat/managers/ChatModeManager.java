@@ -54,8 +54,7 @@ public class ChatModeManager {
             performCleanup();
         }, delayTicks, delayTicks);
 
-        plugin.getLogger()
-                .info("ChatModeManager initialized with cleanup task running every " + cleanupDelay + " seconds.");
+        plugin.logDebug("ChatModeManager initialized with cleanup task running every " + cleanupDelay + " seconds.");
     }
 
     /**
@@ -79,7 +78,7 @@ public class ChatModeManager {
 
         // Log cleanup results if anything was removed
         if (modesRemoved > 0) {
-            plugin.getLogger().info("Chat mode cleanup: Removed " + modesRemoved + " offline player entries.");
+            plugin.logDebug("Chat mode cleanup: Removed " + modesRemoved + " offline player entries.");
         }
     }
 
@@ -89,7 +88,7 @@ public class ChatModeManager {
     public void shutdown() {
         if (cleanupTask != null) {
             cleanupTask.cancel();
-            plugin.getLogger().info("Chat mode cleanup task stopped.");
+            plugin.logDebug("Chat mode cleanup task stopped.");
         }
     }
 
@@ -103,7 +102,7 @@ public class ChatModeManager {
         String lowerName = playerName.toLowerCase();
         playerChatModes.put(lowerName, mode);
 
-        plugin.getLogger().info("Player " + playerName + " chat mode set to " + mode);
+        plugin.logDebug("Player " + playerName + " chat mode set to " + mode);
     }
 
     /**
@@ -150,7 +149,7 @@ public class ChatModeManager {
         ChatMode removedMode = playerChatModes.remove(lowerName);
 
         if (removedMode != null) {
-            plugin.getLogger().info("Removed chat mode for player " + playerName);
+            plugin.logDebug("Removed chat mode for player " + playerName);
         }
     }
 
@@ -163,7 +162,7 @@ public class ChatModeManager {
      */
     public void forceGlobalMode(String playerName) {
         setChatMode(playerName, ChatMode.GLOBAL);
-        plugin.getLogger().info("Forced player " + playerName + " to GLOBAL chat mode");
+        plugin.logDebug("Forced player " + playerName + " to GLOBAL chat mode");
     }
 
     /**
@@ -180,7 +179,7 @@ public class ChatModeManager {
      */
     public void clearAll() {
         playerChatModes.clear();
-        plugin.getLogger().info("All chat modes cleared.");
+        plugin.logDebug("All chat modes cleared.");
     }
 
 }

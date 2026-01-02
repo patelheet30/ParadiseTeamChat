@@ -79,7 +79,7 @@ public class InviteManager {
         sender.sendMessage(configManager.getMessage("player-invited", "{player}", target.getName()));
         target.sendMessage(configManager.getMessage("invite-received", "{team}", team.getName()));
 
-        plugin.getLogger().info(senderName + " invited " + target.getName() + " to team " + team.getName());
+        plugin.logDebug(senderName + " invited " + target.getName() + " to team " + team.getName());
 
         return true;
     }
@@ -133,7 +133,7 @@ public class InviteManager {
 
                         if (resultTeam.isFull()) {
                             clearAllInvitesForTeam(resultTeam.getId());
-                            plugin.getLogger().info(
+                            plugin.logDebug(
                                     "Team " + resultTeam.getName() + " is now full - cleared all pending invites.");
                         }
 
@@ -142,7 +142,7 @@ public class InviteManager {
                         notifyTeamMembers(resultTeam,
                                 configManager.getMessage("player-joined", "{player}", player.getName()));
 
-                        plugin.getLogger().info(player.getName() + " joined team " + resultTeam.getName());
+                        plugin.logDebug(player.getName() + " joined team " + resultTeam.getName());
 
                     } else {
                         player.sendMessage("§cFailed to join team. Please try again.");

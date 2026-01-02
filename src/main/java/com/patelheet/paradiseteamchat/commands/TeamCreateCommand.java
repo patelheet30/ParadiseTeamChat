@@ -144,7 +144,7 @@ public class TeamCreateCommand extends BaseCommand {
                         player.sendMessage("§aTeam Name: §e" + sanitisedName);
                         player.sendMessage("§aTeam Tag: §e[" + sanitisedTag + "]");
 
-                        plugin.getLogger().info("Player " + playerName + " created team '" + sanitisedName
+                        plugin.logDebug("Player " + playerName + " created team '" + sanitisedName
                                 + "' with tag [" + sanitisedTag + "].");
                     });
                 });

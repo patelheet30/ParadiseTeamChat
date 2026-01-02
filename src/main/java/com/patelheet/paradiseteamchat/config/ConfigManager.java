@@ -26,6 +26,7 @@ public class ConfigManager {
     private boolean asyncOperations;
     private int cacheCleanupDelay;
     private String messagePrefix;
+    private boolean debugMode;
 
     /**
      * Constructor for ConfigManager
@@ -99,6 +100,9 @@ public class ConfigManager {
 
         // Message prefix
         messagePrefix = config.getString("messages.prefix", "&8[&bTeamChat&8]&r ");
+
+        // Debug mode
+        debugMode = config.getBoolean("debug-mode", false);
     }
 
     /**
@@ -160,6 +164,10 @@ public class ConfigManager {
 
     public int getCacheCleanupDelay() {
         return cacheCleanupDelay;
+    }
+
+    public boolean isDebugMode() {
+        return debugMode;
     }
 
     /**

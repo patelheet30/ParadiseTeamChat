@@ -88,6 +88,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         registerListeners();
         getLogger().info("ParadiseTeamChat plugin listeners registered.");
 
+        if (configManager.isDebugMode()) {
+            getLogger().warning("Debug mode is ENABLED - verbose logging active!");
+        }
+
         // Rest of the plugin initialisation code will go here
 
         getLogger().info("ParadiseTeamChat Plugin enabled successfully!");
@@ -188,5 +192,11 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public ChatModeManager getChatModeManager() {
         return chatModeManager;
+    }
+
+    public void logDebug(String message) {
+        if (configManager.isDebugMode()) {
+            getLogger().info("[DEBUG] " + message);
+        }
     }
 }

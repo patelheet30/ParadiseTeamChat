@@ -95,7 +95,7 @@ public class TeamDisbandCommand extends BaseCommand {
                         }
                     }
 
-                    plugin.getLogger().info("Team '" + teamName + "' disbanded by " + player.getName());
+                    plugin.logDebug("Team '" + teamName + "' disbanded by " + player.getName());
                 } else {
                     player.sendMessage("§cFailed to disband team. Please try again.");
                 }

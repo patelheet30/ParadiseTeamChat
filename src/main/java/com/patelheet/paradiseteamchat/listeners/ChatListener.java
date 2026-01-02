@@ -126,6 +126,6 @@ public class ChatListener implements Listener {
 
         sendToTeamMembers(team, formattedMessage);
 
-        plugin.getLogger().info("[TEAM:" + team.getName() + "] " + player.getName() + ": " + message);
+        plugin.logDebug("[TEAM:" + team.getName() + "] " + player.getName() + ": " + message);
     }
 }

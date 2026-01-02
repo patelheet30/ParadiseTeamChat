@@ -96,7 +96,7 @@ public class TeamRepository {
 
                     addMember(teamId, team.getOwnerName());
 
-                    plugin.getLogger().info("Team '" + team.getName() + "' created with ID: " + teamId);
+                    plugin.logDebug("Team '" + team.getName() + "' created with ID: " + teamId);
                     return teamId;
                 } else {
                     plugin.getLogger().warning("Creating team failed, no ID obtained.");
@@ -127,7 +127,7 @@ public class TeamRepository {
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                plugin.getLogger().info("Team deleted: ID " + teamId);
+                plugin.logDebug("Team deleted: ID " + teamId);
                 return true;
             } else {
                 plugin.getLogger().warning("Team deletion failed: ID " + teamId + " not found");
@@ -246,7 +246,7 @@ public class TeamRepository {
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                plugin.getLogger().info("Member added: " + playerName + " to team ID " + teamId);
+                plugin.logDebug("Member added: " + playerName + " to team ID " + teamId);
                 return true;
             }
         } catch (SQLException e) {
@@ -279,7 +279,7 @@ public class TeamRepository {
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                plugin.getLogger().info("Member removed: " + playerName + " from team ID " + teamId);
+                plugin.logDebug("Member removed: " + playerName + " from team ID " + teamId);
                 return true;
             } else {
                 plugin.getLogger().warning("Member removal failed: " + playerName + " not found in team ID " + teamId);
