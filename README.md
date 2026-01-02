@@ -1,4 +1,4 @@
-# 🎉 ParadiseTeamChat v1.1.0 - NOW AVAILABLE! 🎉
+# ParadiseTeamChat
 
 > **High-Performance Team Communication for Paper 1.21.10**
 
