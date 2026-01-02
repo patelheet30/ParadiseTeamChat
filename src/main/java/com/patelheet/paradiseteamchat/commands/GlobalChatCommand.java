@@ -4,17 +4,10 @@ import com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager.ChatMode;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import com.patelheet.paradiseteamchat.models.Team;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
  * Global chat command to send messages to the normal chat
@@ -83,26 +76,7 @@ public class GlobalChatCommand implements CommandExecutor {
      * @param message The message to be sent
      */
     private void sendQuickGlobalMessage(Player player, String message) {
-        Team team = plugin.getCacheManager().getPlayerTeam(player.getName().toLowerCase());
-        Component formattedMessage;
-
-        Component namePart;
-        if (team != null) {
-            // Format: [TAG] PlayerName
-            String tagPrefix = "§8[§b" + team.getTag() + "§8]§r ";
-            namePart = LegacyComponentSerializer.legacySection().deserialize(tagPrefix)
-                    .append(Component.text(player.getName()));
-        } else {
-            namePart = Component.text(player.getName());
-        }
-
-        // Combine: [TAG] PlayerName: Message
-        formattedMessage = namePart
-                .append(Component.text("§7: §f"))
-                .append(Component.text(message));
-
-        // Broadcast using Adventure API
-        Bukkit.getServer().broadcast(formattedMessage);
+        player.chat(message);
     }
 
 }

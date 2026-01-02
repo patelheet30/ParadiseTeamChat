@@ -5,6 +5,7 @@ description: High-performance team communication plugin for Paper servers
 api-version: '1.21'
 authors: [Heet Patel]
 website: https://github.com/patelheet30/ParadiseTeamChat
+softdepend: [PlaceholderAPI]
 
 commands:
   team:

@@ -22,6 +22,7 @@ public class ChatListener implements Listener {
     private final ParadiseTeamChatPlugin plugin;
     private final ChatModeManager chatModeManager;
     private final PlainTextComponentSerializer plainSerializer;
+    private boolean chatIntegrationMode;
 
     /**
      * Constructor for ChatListener.
@@ -32,6 +33,8 @@ public class ChatListener implements Listener {
         this.plugin = plugin;
         this.chatModeManager = plugin.getChatModeManager();
         this.plainSerializer = PlainTextComponentSerializer.plainText();
+        this.chatIntegrationMode = plugin.getConfigManager().getConfig()
+                .getBoolean("performance.chat-integration-mode", false);
     }
 
     /**
@@ -43,7 +46,6 @@ public class ChatListener implements Listener {
      * @return The formatted team chat message.
      */
     private String formatTeamMessage(Team team, Player player, String message) {
-        String tag = team.getTag();
         String playerDisplayName = player.getName();
 
         // Format: [TC] PlayerName: message
@@ -76,31 +78,29 @@ public class ChatListener implements Listener {
         String playerName = player.getName().toLowerCase();
         ChatMode mode = chatModeManager.getChatMode(playerName);
 
-        // If in GLOBAL mode, format the message with the Team Tag
-        if (mode == ChatMode.GLOBAL) {
-            Team team = plugin.getCacheManager().getPlayerTeam(playerName);
-
-            event.renderer((source, sourceDisplayName, message, viewer) -> {
-                Component formattedName;
-
-                if (team != null) {
-                    // Format: [TAG] PlayerName
-                    String tagPrefix = "§8[§b" + team.getTag() + "§8]§r ";
-                    formattedName = LegacyComponentSerializer.legacySection().deserialize(tagPrefix)
-                            .append(sourceDisplayName);
-                } else {
-                    formattedName = sourceDisplayName;
-                }
-
-                return formattedName
-                        .append(Component.text("§7: §f"))
-                        .append(message);
-            });
+        if (mode == ChatMode.TEAM) {
+            handleTeamChat(event, player, playerName);
             return;
         }
 
-        // Handle Team Chat (if mode is TEAM)
-        handleTeamChat(event, player, playerName);
+        if (chatIntegrationMode) {
+            return;
+        } else {
+            Team team = plugin.getCacheManager().getPlayerTeam(playerName);
+            if (team != null) {
+                event.renderer((source, sourceDisplayName, message, viewer) -> {
+                    String tagPrefix = "§8[§b" + team.getTag() + "§8]§r ";
+                    Component formattedName = LegacyComponentSerializer.legacySection()
+                            .deserialize(tagPrefix)
+                            .append(sourceDisplayName);
+
+                    return formattedName
+                            .append(Component.text("§7: §f"))
+                            .append(message);
+                });
+            }
+        }
+
     }
 
     private void handleTeamChat(AsyncChatEvent event, Player player, String playerName) {
