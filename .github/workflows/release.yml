@@ -29,9 +29,13 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Plugin version: $VERSION"
       
-      # Build Linux variant
+      # Clean once at the start
+      - name: Clean build directory
+        run: mvn clean
+      
+      # Build Linux variant (no clean)
       - name: Build Linux variant
-        run: mvn clean package -P linux
+        run: mvn package -P linux
       
       - name: Verify Linux JAR
         run: |
@@ -40,11 +44,11 @@ jobs:
             exit 1
           fi
           SIZE=$(du -h "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-linux.jar" | cut -f1)
-          echo "Linux JAR size: $SIZE"
+          echo "✅ Linux JAR size: $SIZE"
       
-      # Build Windows variant
+      # Build Windows variant (no clean)
       - name: Build Windows variant
-        run: mvn clean package -P windows
+        run: mvn package -P windows
       
       - name: Verify Windows JAR
         run: |
@@ -53,11 +57,11 @@ jobs:
             exit 1
           fi
           SIZE=$(du -h "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-windows.jar" | cut -f1)
-          echo "Windows JAR size: $SIZE"
+          echo "✅ Windows JAR size: $SIZE"
       
-      # Build Universal variant
+      # Build Universal variant (no clean)
       - name: Build Universal variant
-        run: mvn clean package -P universal
+        run: mvn package -P universal
       
       - name: Verify Universal JAR
         run: |
@@ -66,7 +70,13 @@ jobs:
             exit 1
           fi
           SIZE=$(du -h "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-universal.jar" | cut -f1)
-          echo "Universal JAR size: $SIZE"
+          echo "✅ Universal JAR size: $SIZE"
+      
+      # List all JARs to confirm
+      - name: List all built JARs
+        run: |
+          echo "=== All JAR files in target/ ==="
+          ls -lh target/*.jar
       
       # Upload all variants to release
       - name: Upload artifacts to Release
