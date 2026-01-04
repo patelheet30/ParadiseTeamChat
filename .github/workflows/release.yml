@@ -29,30 +29,65 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "Plugin version: $VERSION"
       
-      - name: Build with Maven
-        run: mvn clean package
+      # Build Linux variant
+      - name: Build Linux variant
+        run: mvn clean package -P linux
       
-      - name: Verify JAR was created
+      - name: Verify Linux JAR
         run: |
-          if [ ! -f "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}.jar" ]; then
-            echo "ERROR: JAR file not found!"
+          if [ ! -f "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-linux.jar" ]; then
+            echo "ERROR: Linux JAR file not found!"
             exit 1
           fi
-          echo "JAR file found: ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}.jar"
+          SIZE=$(du -h "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-linux.jar" | cut -f1)
+          echo "Linux JAR size: $SIZE"
       
-      - name: Upload JAR to Release
+      # Build Windows variant
+      - name: Build Windows variant
+        run: mvn clean package -P windows
+      
+      - name: Verify Windows JAR
+        run: |
+          if [ ! -f "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-windows.jar" ]; then
+            echo "ERROR: Windows JAR file not found!"
+            exit 1
+          fi
+          SIZE=$(du -h "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-windows.jar" | cut -f1)
+          echo "Windows JAR size: $SIZE"
+      
+      # Build Universal variant
+      - name: Build Universal variant
+        run: mvn clean package -P universal
+      
+      - name: Verify Universal JAR
+        run: |
+          if [ ! -f "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-universal.jar" ]; then
+            echo "ERROR: Universal JAR file not found!"
+            exit 1
+          fi
+          SIZE=$(du -h "target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-universal.jar" | cut -f1)
+          echo "Universal JAR size: $SIZE"
+      
+      # Upload all variants to release
+      - name: Upload artifacts to Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}.jar
+            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-linux.jar
+            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-windows.jar
+            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-universal.jar
             src/main/resources/config.yml
             README.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Upload artifact for workflow run
+      # Upload artifacts for workflow run (optional - for debugging)
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}
-          path: target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}.jar
+          name: ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-all-variants
+          path: |
+            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-linux.jar
+            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-windows.jar
+            target/ParadiseTeamChat-${{ steps.get_version.outputs.VERSION }}-universal.jar
           retention-days: 30
