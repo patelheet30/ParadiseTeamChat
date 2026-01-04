@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.patelheet.paradiseteamchat.commands.GlobalChatCommand;
+import com.patelheet.paradiseteamchat.commands.TeamAdminCommand;
 import com.patelheet.paradiseteamchat.commands.TeamChatCommand;
 import com.patelheet.paradiseteamchat.commands.TeamCommand;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
@@ -24,7 +25,7 @@ import com.patelheet.paradiseteamchat.utils.InputValidator;
  * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
- * @version 1.2.0
+ * @version 1.3.0
  */
 public class ParadiseTeamChatPlugin extends JavaPlugin {
     private static ParadiseTeamChatPlugin instance;
@@ -146,6 +147,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
         GlobalChatCommand globalChatCommand = new GlobalChatCommand(this);
         getCommand("globalchat").setExecutor(globalChatCommand);
+
+        TeamAdminCommand teamAdminCommand = new TeamAdminCommand(this);
+        getCommand("teamadmin").setExecutor(teamAdminCommand);
+        getCommand("teamadmin").setTabCompleter(teamAdminCommand);
     }
 
     private void registerListeners() {
