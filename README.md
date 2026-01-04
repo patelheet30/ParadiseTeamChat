@@ -2,6 +2,12 @@
 
 > **High-Performance Team Communication for Paper 1.21.10**
 
+<div align="center">
+
+[![Latest Release](https://img.shields.io/github/v/release/patelheet30/ParadiseTeamChat)](https://github.com/patelheet30/ParadiseTeamChat/releases/latest) [![Build Status](https://github.com/patelheet30/ParadiseTeamChat/actions/workflows/release.yml/badge.svg)](https://github.com/patelheet30/ParadiseTeamChat/actions) [![License](https://img.shields.io/github/license/patelheet30/ParadiseTeamChat)](LICENSE)
+
+</div>
+
 ---
 
 ## 🚀 What is ParadiseTeamChat?
@@ -80,11 +86,21 @@ A blazing-fast, feature-rich team communication plugin that brings **private tea
 
 ## 📥 Download & Installation
 
-**GitHub:** [github.com/patelheet30/ParadiseTeamChat](https://github.com/patelheet30/ParadiseTeamChat)
+**GitHub Releases:** [Latest Release](https://github.com/patelheet30/ParadiseTeamChat/releases/latest)
+
+### Platform-Specific Builds
+
+We provide optimized builds for different platforms:
+
+- **Linux x64** - Recommended for production servers (~2-3 MB)
+- **Windows x64** - For local development and testing, if you're on Windows (~2-3 MB)
+- **Universal** - Works on all platforms including macOS and ARM (~14 MB)
+
+**Choose based on your server's operating system.** If unsure, download the Universal build.
 
 ### Quick Setup:
 
-1. Download the `jar` via the GitHub releases page
+1. Download the appropriate JAR from [Releases](https://github.com/patelheet30/ParadiseTeamChat/releases/latest)
 2. Drop into your `plugins/` folder
 3. Restart server
 4. **That's it!** Zero configuration needed ✨
