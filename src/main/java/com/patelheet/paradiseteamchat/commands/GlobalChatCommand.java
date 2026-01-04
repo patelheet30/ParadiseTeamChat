@@ -12,7 +12,8 @@ import org.bukkit.entity.Player;
 /**
  * Global chat command to send messages to the normal chat
  * /gc - Switch to GLOBAL mode
- * /gc <message> - Send quick global message without changing mode
+ * /gc <message> - Send quick global message while temporarily switching chat
+ * mode to GLOBAL
  */
 public class GlobalChatCommand implements CommandExecutor {
     private final ParadiseTeamChatPlugin plugin;
@@ -70,13 +71,23 @@ public class GlobalChatCommand implements CommandExecutor {
     }
 
     /**
-     * Send a quick global message without changing the player's chat mode
+     * Send a quick global message while temporarily switching chat mode to GLOBAL
      * 
      * @param player  The player sending the message
      * @param message The message to be sent
      */
     private void sendQuickGlobalMessage(Player player, String message) {
+        String playerName = player.getName().toLowerCase();
+
+        // Remember original mode
+        ChatMode originalMode = chatModeManager.getChatMode(playerName);
+
+        // Temporarily switch to GLOBAL mode
+        chatModeManager.setChatMode(playerName, ChatMode.GLOBAL);
         player.chat(message);
+
+        // Immediately restore original mode
+        chatModeManager.setChatMode(playerName, originalMode);
     }
 
 }
