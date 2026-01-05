@@ -28,6 +28,7 @@ public class ConfigManager {
     private String messagePrefix;
     private boolean debugMode;
     private boolean allowEditing;
+    private boolean chatIntegrationMode;
 
     /**
      * Constructor for ConfigManager
@@ -105,6 +106,10 @@ public class ConfigManager {
 
         // Debug mode
         debugMode = config.getBoolean("debug-mode", false);
+
+        // Chat integration mode
+        chatIntegrationMode = config.getBoolean("performance.chat-integration-mode", false);
+
     }
 
     /**
@@ -174,6 +179,10 @@ public class ConfigManager {
 
     public boolean isEditingAllowed() {
         return allowEditing;
+    }
+
+    public boolean isChatIntegrationMode() {
+        return chatIntegrationMode;
     }
 
     /**

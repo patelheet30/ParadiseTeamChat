@@ -22,7 +22,6 @@ public class ChatListener implements Listener {
     private final ParadiseTeamChatPlugin plugin;
     private final ChatModeManager chatModeManager;
     private final PlainTextComponentSerializer plainSerializer;
-    private boolean chatIntegrationMode;
 
     /**
      * Constructor for ChatListener.
@@ -33,8 +32,6 @@ public class ChatListener implements Listener {
         this.plugin = plugin;
         this.chatModeManager = plugin.getChatModeManager();
         this.plainSerializer = PlainTextComponentSerializer.plainText();
-        this.chatIntegrationMode = plugin.getConfigManager().getConfig()
-                .getBoolean("performance.chat-integration-mode", false);
     }
 
     /**
@@ -83,7 +80,7 @@ public class ChatListener implements Listener {
             return;
         }
 
-        if (chatIntegrationMode) {
+        if (plugin.getConfigManager().isChatIntegrationMode()) {
             return;
         } else {
             Team team = plugin.getCacheManager().getPlayerTeam(playerName);
