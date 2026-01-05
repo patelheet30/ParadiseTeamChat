@@ -25,7 +25,7 @@ import com.patelheet.paradiseteamchat.utils.InputValidator;
  * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
- * @version 1.5.0
+ * @version 1.5.1
  */
 public class ParadiseTeamChatPlugin extends JavaPlugin {
     private static ParadiseTeamChatPlugin instance;
