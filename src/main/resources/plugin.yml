@@ -1,5 +1,5 @@
 name: ParadiseTeamChat
-version: 1.4.0
+version: 1.5.0
 main: com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin
 description: High-performance team communication plugin for Paper servers
 api-version: '1.21'
@@ -10,7 +10,7 @@ softdepend: [PlaceholderAPI]
 commands:
   team:
     description: Manage your team
-    usage: /team <create|disband|invite|kick|accept|leave|info|help>
+    usage: /team <create|disband|invite|kick|accept|leave|info|edit|help>
     aliases: [t]
     
   teamchat:
@@ -48,7 +48,11 @@ permissions:
   teamchat.team.kick:
     description: Allows kicking players from your team
     default: true
-    
+
+  teamchat.team.edit:
+    description: Allows editing team name and tag
+    default: true
+
   teamchat.chat.team:
     description: Allows using team chat
     default: true
@@ -63,3 +67,4 @@ permissions:
       teamchat.team.invite: true
       teamchat.team.kick: true
       teamchat.chat.team: true
+      teamchat.team.edit: true

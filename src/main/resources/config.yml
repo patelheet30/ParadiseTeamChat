@@ -7,6 +7,7 @@ team:
   max-tag-length: 4             # Maximum length of team tags
   name-regex: '^[A-Za-z0-9_]+$' # Regex for valid team names (only alphanumeric)
   tag-regex: '^[A-Za-z0-9]+$'   # Regex for valid team tags (only alphanumeric)
+  allow-editing: true           # Whether team owners can edit team name and tag
 
 # Blacklisted words (names and tags)
 blacklist:
@@ -69,6 +70,7 @@ messages:
   no-pending-invite: "&cYou don't have any pending invites."
   cannot-invite-self: "&cYou cannot invite yourself!"
   already-invited: "&cThat player already has a pending invite."
+  editing-disabled: "&cTeam editing is currently disabled by the server."
   
   # Info messages
   chat-mode-team: "&aTeam chat mode &eenabled&a."

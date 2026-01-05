@@ -32,6 +32,7 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
         subcommands.put("accept", new TeamAcceptCommand(plugin));
         subcommands.put("leave", new TeamLeaveCommand(plugin));
         subcommands.put("info", new TeamInfoCommand(plugin));
+        subcommands.put("edit", new TeamEditCommand(plugin));
     }
 
     @Override
@@ -100,6 +101,11 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§e/team accept §7- Accept a team invitation");
         sender.sendMessage("§e/team leave §7- Leave your current team");
         sender.sendMessage("§e/team info [team] §7- View team information");
+
+        if (plugin.getConfigManager().isEditingAllowed()) {
+            sender.sendMessage("§e/team edit <name|tag> <value> §7- Edit team name or tag");
+        }
+
         sender.sendMessage("§8§m                                    ");
     }
 }

@@ -27,6 +27,7 @@ public class ConfigManager {
     private int cacheCleanupDelay;
     private String messagePrefix;
     private boolean debugMode;
+    private boolean allowEditing;
 
     /**
      * Constructor for ConfigManager
@@ -71,6 +72,7 @@ public class ConfigManager {
         maxMembers = config.getInt("team.max-members", 10);
         maxNameLength = config.getInt("team.max-name-length", 16);
         maxTagLength = config.getInt("team.max-tag-length", 6);
+        allowEditing = config.getBoolean("team.allow-editing", true);
 
         // Load regex patterns (with error handling)
         String nameRegex = config.getString("team.name-regex", "^[A-Za-z0-9]+$");
@@ -168,6 +170,10 @@ public class ConfigManager {
 
     public boolean isDebugMode() {
         return debugMode;
+    }
+
+    public boolean isEditingAllowed() {
+        return allowEditing;
     }
 
     /**
