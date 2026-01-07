@@ -79,6 +79,16 @@ public class DatabaseManager {
                             ");");
 
             stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS team_roles (" +
+                            "team_id INTEGER NOT NULL," +
+                            "player_name TEXT NOT NULL," +
+                            "role_id TEXT NOT NULL," +
+                            "assigned_date INTEGER NOT NULL," +
+                            "PRIMARY KEY (team_id, player_name)," +
+                            "FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE" +
+                            ");");
+
+            stmt.execute(
                     "CREATE INDEX IF NOT EXISTS idx_members_name " +
                             "ON team_members(player_name);");
 
@@ -89,6 +99,10 @@ public class DatabaseManager {
             stmt.execute(
                     "CREATE INDEX IF NOT EXISTS idx_teams_name_lower " +
                             "ON teams(name_lower);");
+
+            stmt.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_roles_player " +
+                            "ON team_roles(player_name);");
         }
     }
 
