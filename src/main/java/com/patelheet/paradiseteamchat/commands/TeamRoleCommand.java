@@ -87,6 +87,9 @@ public class TeamRoleCommand extends BaseCommand implements TabCompleter {
 
     /**
      * Capitalises the first letter of a string.
+     * 
+     * @param str The input string.
+     * @return The string with the first letter capitalised.
      */
     private String capitaliseFirst(String str) {
         if (str == null || str.isEmpty()) {
