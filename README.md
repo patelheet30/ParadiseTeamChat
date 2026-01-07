@@ -30,14 +30,14 @@ A blazing-fast, feature-rich team communication plugin that brings **private tea
 - 🔄 Toggle between **team** and **global** chat modes
 - 📨 Send quick messages without changing modes
 - 🏷️ Custom team tags displayed in chat: `[TAG] PlayerName: message` (Integrations w/ PlaceholderAPI and LPC)
-- 🎨 Color-coded formatting for easy identification
+- 🎨 Colour-coded formatting for easy identification
 - 👥 Only team members see team chat messages
 
 ### 🛡️ **Rock-Solid Security**
 
 - 🔒 Input validation prevents malicious content
 - 🚫 Banned word filtering (blocks staff impersonation)
-- 🧹 Sanitizes color codes and invisible Unicode
+- 🧹 Sanitizes colour codes and invisible Unicode
 - 💉 SQL injection protection built-in
 
 ### 🎮 **Player-Friendly Commands**

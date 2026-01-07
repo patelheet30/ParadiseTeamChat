@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * This class acts as the first line of defense against:
  * - Invalid characters in team names/tags
  * - Banned words (impersonation of staff)
- * - Color code injection
+ * - Colour code injection
  * - Invisible Unicode characters
  * - SQL injection (though prepared statements handle this too)
  */
@@ -60,7 +60,7 @@ public class InputValidator {
     }
 
     /**
-     * Sanitises user input by removing color codes and invisible Unicode
+     * Sanitises user input by removing colour codes and invisible Unicode
      * characters.
      * 
      * @param input The input string to sanitise.
@@ -71,7 +71,7 @@ public class InputValidator {
             return "";
         }
 
-        // Remove color codes (e.g., &a, §b)
+        // Remove colour codes (e.g., &a, §b)
         String sanitised = input.replaceAll("[&§][0-9a-fk-or]", "");
 
         // Remove invisible Unicode characters
