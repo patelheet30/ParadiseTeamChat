@@ -76,6 +76,14 @@ public class RoleManager {
         plugin.logDebug("Loaded roles: " + String.join(", ", roles.keySet()));
     }
 
+    public void reloadRoles() {
+        plugin.logDebug("Reloading roles from configuration...");
+        roles.clear();
+
+        loadRoles();
+        plugin.getLogger().info("Roles reloaded: " + roles.size() + " roles available.");
+    }
+
     /**
      * Loads the owner role from the configuration.
      * 

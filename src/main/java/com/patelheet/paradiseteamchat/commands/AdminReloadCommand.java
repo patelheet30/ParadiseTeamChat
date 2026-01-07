@@ -40,7 +40,7 @@ public class AdminReloadCommand extends BaseCommand {
         try {
             // Reload configuration
             plugin.getConfigManager().reloadConfig();
-            plugin.getRoleManager().reload();
+            plugin.getRoleManager().reloadRoles();
 
             sender.sendMessage(configManager.getMessage("config-reloaded"));
 
