@@ -10,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Repository class for managing Team and TeamMember data in the database.
@@ -63,6 +65,14 @@ public class TeamRepository {
         }
     }
 
+    private void loadTeamRoles(Team team) {
+        Map<String, String> roles = getTeamRoles(team.getId());
+
+        for (Map.Entry<String, String> entry : roles.entrySet()) {
+            team.setMemberRole(entry.getKey(), entry.getValue());
+        }
+    }
+
     /**
      * Creates a new team in the database.
      * 
@@ -95,6 +105,8 @@ public class TeamRepository {
                     int teamId = generatedKeys.getInt(1);
 
                     addMember(teamId, team.getOwnerName());
+
+                    setMemberRole(teamId, team.getOwnerName(), "owner");
 
                     plugin.logDebug("Team '" + team.getName() + "' created with ID: " + teamId);
                     return teamId;
@@ -159,6 +171,7 @@ public class TeamRepository {
             if (rs.next()) {
                 Team team = buildTeamFromResultSet(rs);
                 loadTeamMembers(team);
+                loadTeamRoles(team);
                 return team;
             }
         } catch (SQLException e) {
@@ -187,6 +200,7 @@ public class TeamRepository {
             if (rs.next()) {
                 Team team = buildTeamFromResultSet(rs);
                 loadTeamMembers(team);
+                loadTeamRoles(team);
                 return team;
             }
         } catch (SQLException e) {
@@ -217,6 +231,7 @@ public class TeamRepository {
             if (rs.next()) {
                 Team team = buildTeamFromResultSet(rs);
                 loadTeamMembers(team);
+                loadTeamRoles(team);
                 return team;
             }
         } catch (SQLException e) {
@@ -246,6 +261,9 @@ public class TeamRepository {
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
+
+                setMemberRole(teamId, playerName, "member");
+
                 plugin.logDebug("Member added: " + playerName + " to team ID " + teamId);
                 return true;
             }
@@ -300,7 +318,10 @@ public class TeamRepository {
      */
     public List<TeamMember> getTeamMembers(int teamId) {
         List<TeamMember> members = new ArrayList<>();
-        String sql = "SELECT * FROM team_members WHERE team_id = ?";
+        String sql = "SELECT tm.*, COALESCE(tr.role_id, 'member') as role_id " +
+                "FROM team_members tm " +
+                "LEFT JOIN team_roles tr ON tm.team_id = tr.team_id AND tm.player_name = tr.player_name " +
+                "WHERE tm.team_id = ?";
 
         Connection conn = databaseManager.getConnection();
 
@@ -313,7 +334,8 @@ public class TeamRepository {
                 members.add(new TeamMember(
                         rs.getInt("team_id"),
                         rs.getString("player_name"),
-                        rs.getLong("joined_date")));
+                        rs.getLong("joined_date"),
+                        rs.getString("role_id")));
             }
         } catch (SQLException e) {
             plugin.getLogger().severe("Error getting team members: " + e.getMessage());
@@ -339,6 +361,7 @@ public class TeamRepository {
             while (rs.next()) {
                 Team team = buildTeamFromResultSet(rs);
                 loadTeamMembers(team);
+                loadTeamRoles(team);
                 teams.add(team);
             }
         } catch (SQLException e) {
@@ -347,4 +370,154 @@ public class TeamRepository {
         }
         return teams;
     }
+
+    /**
+     * Set the role of a member in a team.
+     * 
+     * @param teamId     The ID of the team.
+     * @param playerName The name of the player.
+     * @param roleId     The role ID to assign.
+     * @return True if the role was set successfully, false otherwise.
+     */
+    public boolean setMemberRole(int teamId, String playerName, String roleId) {
+        String sql = "INSERT OR REPLACE INTO team_roles " +
+                "(team_id, player_name, role_id, assigned_date) " +
+                "VALUES (?, ?, ?, ?)";
+
+        Connection conn = databaseManager.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            pstmt.setString(2, playerName.toLowerCase());
+            pstmt.setString(3, roleId.toLowerCase());
+            pstmt.setLong(4, System.currentTimeMillis());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                plugin.logDebug("Role set: " + playerName + " to " + roleId + " in team ID " + teamId);
+                return true;
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error setting member role: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Get the role of a member in a team.
+     * 
+     * @param teamId     The ID of the team.
+     * @param playerName The name of the player.
+     * @return The role ID of the player, or "member" if not assigned.
+     */
+    public String getMemberRole(int teamId, String playerName) {
+        String sql = "SELECT role_id FROM team_roles " +
+                "WHERE team_id = ? AND player_name = ?";
+
+        Connection conn = databaseManager.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            pstmt.setString(2, playerName.toLowerCase());
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("role_id");
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error getting member role: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return "member";
+    }
+
+    /**
+     * Get all roles in a team.
+     * 
+     * @param teamId The ID of the team.
+     * @return A map of player names to their role IDs.
+     */
+    public Map<String, String> getTeamRoles(int teamId) {
+        Map<String, String> roles = new HashMap<>();
+        String sql = "SELECT player_name, role_id FROM team_roles WHERE team_id = ?";
+
+        Connection conn = databaseManager.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                roles.put(rs.getString("player_name"), rs.getString("role_id"));
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error getting team roles: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return roles;
+    }
+
+    /**
+     * Remove the role assignment of a member in a team.
+     * 
+     * @param teamId     The ID of the team.
+     * @param playerName The name of the player.
+     * @return True if the role was removed successfully, false otherwise.
+     */
+    public boolean removeMemberRole(int teamId, String playerName) {
+        String sql = "DELETE FROM team_roles WHERE team_id = ? AND player_name = ?";
+
+        Connection conn = databaseManager.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            pstmt.setString(2, playerName.toLowerCase());
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                plugin.logDebug("Role removed: " + playerName + " from team ID " + teamId);
+                return true;
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error removing member role: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Get all members with a specific role in a team.
+     * 
+     * @param teamId The ID of the team.
+     * @param roleId The role ID to filter by.
+     * @return A list of player names with the specified role.
+     */
+    public List<String> getMembersWithRole(int teamId, String roleId) {
+        List<String> members = new ArrayList<>();
+        String sql = "SELECT player_name FROM team_roles " +
+                "WHERE team_id = ? AND role_id = ?";
+
+        Connection conn = databaseManager.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, teamId);
+            pstmt.setString(2, roleId.toLowerCase());
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                members.add(rs.getString("player_name"));
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe("Error getting members with role: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return members;
+    }
+
 }
