@@ -40,6 +40,42 @@ performance:
   chat-integration-mode: false  # false = override chat (default), true = integrate with existing chat plugins
   debug-mode: false             # Enable debug mode for more detailed logging
 
+
+# ===============================
+# ROLE SYSTEM CONFIGURATION
+# ===============================
+roles:
+  enabled: true                 # Enable the role system
+
+  # Owner Role (cannot be changed) (Always required)
+  owner:
+    display-name: "Owner"
+    colour: "&6"
+  
+  # Define additional sub-roles below
+  # Each role needs: display-name, colour, permissions
+  
+  sub-roles:
+    moderator:
+      display-name: "Moderator"
+      colour: "&e"
+      permissions:
+        invite: true
+        kick: true
+        promote: true
+        demote: true
+        edit-team: false
+    
+    member:
+      display-name: "Member"
+      colour: "&7"
+      permissions:
+        invite: false
+        kick: false
+        promote: false
+        demote: false
+        edit-team: false
+
 # Message configurations
 messages:
   prefix: "&8[&bPTC&8]&r "
@@ -76,3 +112,20 @@ messages:
   chat-mode-team: "&aTeam chat mode &eenabled&a."
   chat-mode-global: "&aTeam chat mode &cdisabled&a."
   config-reloaded: "&aConfiguration reloaded!"
+  
+  # Role system messages
+  role-promoted: "&e{player}&a has been promoted to {role}&a!"
+  role-demoted: "&e{player}&a has been demoted to &7Member&a."
+  role-info: "&e{player}&7 is a {role}"
+  role-not-found: "&cRole '&e{role}&c' does not exist."
+  cannot-promote-owner: "&cYou cannot change the owner's role!"
+  cannot-demote-owner: "&cYou cannot demote the owner!"
+  already-has-role: "&e{player}&c already has that role."
+  no-promote-permission: "&cYou don't have permission to promote members."
+  no-demote-permission: "&cYou don't have permission to demote members."
+  no-invite-permission: "&cYou don't have permission to invite players."
+  no-kick-permission: "&cYou don't have permission to kick members."
+  no-edit-permission: "&cYou don't have permission to edit the team."
+  cannot-kick-owner: "&cYou cannot kick the team owner!"
+  cannot-promote-to-owner: "&cYou cannot promote anyone to owner!"
+  roles-disabled: "&cThe role system is currently disabled."
