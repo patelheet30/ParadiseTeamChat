@@ -58,16 +58,25 @@ public class TeamKickCommand extends BaseCommand implements TabCompleter {
         String playerName = player.getName().toLowerCase();
         String targetLower = targetName.toLowerCase();
 
-        // Validate team membership and ownership
+        // Validate team membership
         Team team = plugin.getCacheManager().getPlayerTeam(playerName);
         if (team == null) {
             player.sendMessage(configManager.getMessage("not-in-team"));
             return true;
         }
 
-        // Only team owners can kick members
-        if (!team.isOwner(playerName)) {
-            player.sendMessage(configManager.getMessage("not-owner"));
+        // Check if player has permission to kick
+        if (plugin.getRoleManager().isRolesEnabled()) {
+            String roleId = team.getMemberRole(playerName);
+            if (!plugin.getRoleManager().hasPermission(roleId, "kick")) {
+                player.sendMessage(configManager.getMessage("no-kick-permission"));
+                return true;
+            }
+        }
+
+        // Prevent kicking the owner
+        if (team.isOwner(targetLower)) {
+            player.sendMessage(configManager.getMessage("cannot-kick-owner"));
             return true;
         }
 
@@ -148,12 +157,22 @@ public class TeamKickCommand extends BaseCommand implements TabCompleter {
 
             Team team = plugin.getCacheManager().getPlayerTeam(playerName);
 
-            if (team != null && team.isOwner(playerName)) {
-                String input = args[0].toLowerCase();
+            if (team != null) {
 
-                for (String memberName : team.getMembers()) {
-                    if (!memberName.equals(playerName) && memberName.startsWith(input)) {
-                        completions.add(memberName);
+                boolean canKick = true;
+                if (plugin.getRoleManager().isRolesEnabled()) {
+                    String roleId = team.getMemberRole(playerName);
+                    canKick = plugin.getRoleManager().hasPermission(roleId, "kick");
+                }
+
+                if (canKick) {
+                    String input = args[0].toLowerCase();
+
+                    for (String memberName : team.getMembers()) {
+                        if (!memberName.equals(playerName) && !team.isOwner(memberName)
+                                && memberName.startsWith(input)) {
+                            completions.add(memberName);
+                        }
                     }
                 }
             }
