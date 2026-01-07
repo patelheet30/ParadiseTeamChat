@@ -144,16 +144,16 @@ public class RoleManager {
         }
 
         String displayName = roleSection.getString("display-name");
-        String color = roleSection.getString("color");
+        String colour = roleSection.getString("colour");
 
-        if (displayName == null || color == null) {
-            plugin.getLogger().warning("Role '" + roleId + "' missing display-name or color - skipping");
+        if (displayName == null || colour == null) {
+            plugin.getLogger().warning("Role '" + roleId + "' missing display-name or colour - skipping");
             return null;
         }
 
         RolePermissions permissions = loadRolePermissions(roleId, roleSection);
 
-        return new RoleDefinition(roleId, displayName, color, permissions, false);
+        return new RoleDefinition(roleId, displayName, colour, permissions, false);
     }
 
     /**
