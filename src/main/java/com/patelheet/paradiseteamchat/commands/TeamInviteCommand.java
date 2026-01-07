@@ -72,6 +72,15 @@ public class TeamInviteCommand extends BaseCommand implements TabCompleter {
             return true;
         }
 
+        // Check if player has permission to invite
+        if (plugin.getRoleManager().isRolesEnabled()) {
+            String roleId = team.getMemberRole(playerName);
+            if (!plugin.getRoleManager().hasPermission(roleId, "invite")) {
+                player.sendMessage(configManager.getMessage("no-invite-permission"));
+                return true;
+            }
+        }
+
         // Send invite (delegate to InviteManager)
         plugin.getInviteManager().sendInvite(player, targetName, team);
 
