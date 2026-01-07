@@ -26,7 +26,7 @@ import com.patelheet.paradiseteamchat.managers.RoleManager;
  * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
- * @version 1.5.1
+ * @version 2.0.0
  */
 public class ParadiseTeamChatPlugin extends JavaPlugin {
     private static ParadiseTeamChatPlugin instance;
