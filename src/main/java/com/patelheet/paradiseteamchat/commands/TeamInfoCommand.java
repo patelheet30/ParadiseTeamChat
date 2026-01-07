@@ -1,6 +1,7 @@
 package com.patelheet.paradiseteamchat.commands;
 
 import com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin;
+import com.patelheet.paradiseteamchat.models.RoleDefinition;
 import com.patelheet.paradiseteamchat.models.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -90,18 +91,25 @@ public class TeamInfoCommand extends BaseCommand implements TabCompleter {
         player.sendMessage("");
         player.sendMessage("§eTeam Members:");
 
+        boolean rolesEnabled = plugin.getRoleManager().isRolesEnabled();
+
         for (String memberName : team.getMembers()) {
             Player member = Bukkit.getPlayerExact(memberName);
             boolean isOnline = (member != null && member.isOnline());
             String status = isOnline ? "§a●" : "§7●";
             String displayName = capitaliseFirst(memberName);
 
-            // Mark owner with special indicator
-            if (team.isOwner(memberName)) {
-                player.sendMessage("  " + status + " §f" + displayName + " §6[Owner]");
-            } else {
-                player.sendMessage("  " + status + " §f" + displayName);
+            // Get role display
+            String roleDisplay = "";
+            if (rolesEnabled) {
+                String roleId = team.getMemberRole(memberName);
+                RoleDefinition role = plugin.getRoleManager().getRole(roleId);
+                if (role != null) {
+                    roleDisplay = " " + role.getFormattedRoleBrackets();
+                }
             }
+
+            player.sendMessage("  " + status + " §f" + displayName + roleDisplay);
         }
 
         player.sendMessage("§8§m                                    ");
