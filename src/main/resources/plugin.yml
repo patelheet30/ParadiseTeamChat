@@ -53,6 +53,14 @@ permissions:
     description: Allows editing team name and tag
     default: true
 
+  teamchat.team.promote:
+    description: Allows promoting team members to roles
+    default: true
+
+  teamchat.team.demote:
+    description: Allows demoting team members from roles
+    default: true
+
   teamchat.chat.team:
     description: Allows using team chat
     default: true
@@ -68,3 +76,5 @@ permissions:
       teamchat.team.kick: true
       teamchat.chat.team: true
       teamchat.team.edit: true
+      teamchat.team.promote: true
+      teamchat.team.demote: true
