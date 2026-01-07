@@ -8,6 +8,7 @@ public class TeamMember {
     private final int teamId;
     private final String playerName;
     private final long joinedDate;
+    private String roleId;
 
     /**
      * Constructor for creating a TeamMember object
@@ -20,6 +21,22 @@ public class TeamMember {
         this.teamId = teamId;
         this.playerName = playerName.toLowerCase();
         this.joinedDate = joinedDate;
+        this.roleId = "member";
+    }
+
+    /**
+     * Constructor for creating a TeamMember object with a specific role
+     * 
+     * @param teamId     ID of the team
+     * @param playerName Name of the player (case insensitive, stored in lowercase)
+     * @param joinedDate Timestamp of when the player joined the team
+     * @param roleId     Role ID assigned to the player
+     */
+    public TeamMember(int teamId, String playerName, long joinedDate, String roleId) {
+        this.teamId = teamId;
+        this.playerName = playerName.toLowerCase();
+        this.joinedDate = joinedDate;
+        this.roleId = roleId;
     }
 
     public int getTeamId() {
@@ -34,11 +51,20 @@ public class TeamMember {
         return joinedDate;
     }
 
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId != null ? roleId.toLowerCase() : "member";
+    }
+
     @Override
     public String toString() {
         return "TeamMember{" +
                 "teamId=" + teamId +
                 ", playerName='" + playerName + '\'' +
+                ", roleId='" + roleId + '\'' +
                 ", joinedDate=" + joinedDate +
                 '}';
     }
