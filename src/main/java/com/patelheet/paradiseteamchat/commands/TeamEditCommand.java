@@ -67,10 +67,13 @@ public class TeamEditCommand extends BaseCommand {
             return true;
         }
 
-        // Check if player is the team owner
-        if (!team.isOwner(playerName)) {
-            player.sendMessage(configManager.getMessage("not-owner"));
-            return true;
+        // Check if player has permission to edit
+        if (plugin.getRoleManager().isRolesEnabled()) {
+            String roleId = team.getMemberRole(playerName);
+            if (!plugin.getRoleManager().hasPermission(roleId, "edit-team")) {
+                player.sendMessage(configManager.getMessage("no-edit-permission"));
+                return true;
+            }
         }
 
         // Route to appropriate edit method
