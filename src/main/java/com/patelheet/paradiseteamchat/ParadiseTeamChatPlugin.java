@@ -18,6 +18,7 @@ import com.patelheet.paradiseteamchat.managers.CacheManager;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.InviteManager;
 import com.patelheet.paradiseteamchat.utils.InputValidator;
+import com.patelheet.paradiseteamchat.managers.RoleManager;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -38,6 +39,7 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private InviteManager inviteManager;
     private ChatModeManager chatModeManager;
     private TeamChatExpansion placeholderExpansion;
+    private RoleManager roleManager;
 
     @Override
     public void onEnable() {
@@ -74,6 +76,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         chatModeManager = new ChatModeManager(this);
         chatModeManager.initialise();
         getLogger().info("ParadiseTeamChat plugin chat mode manager initialised.");
+
+        roleManager = new RoleManager(this);
+        roleManager.initialise();
+        getLogger().info("ParadiseTeamChat plugin role manager initialised.");
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholderExpansion = new TeamChatExpansion(this);
@@ -197,6 +203,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public ChatModeManager getChatModeManager() {
         return chatModeManager;
+    }
+
+    public RoleManager getRoleManager() {
+        return roleManager;
     }
 
     public void logDebug(String message) {
