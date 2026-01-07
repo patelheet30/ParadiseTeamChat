@@ -40,12 +40,14 @@ public class AdminReloadCommand extends BaseCommand {
         try {
             // Reload configuration
             plugin.getConfigManager().reloadConfig();
+            plugin.getRoleManager().reload();
 
             sender.sendMessage(configManager.getMessage("config-reloaded"));
 
             // Log reload action
             plugin.getLogger().info("Configuration reloaded by " + sender.getName());
             plugin.logDebug("Config reloaded - new values loaded into memory");
+            plugin.logDebug("Roles reloaded - " + plugin.getRoleManager().getRoleCount() + " roles loaded");
 
         } catch (Exception e) {
             sender.sendMessage("§cFailed to reload configuration! Check console for errors.");
