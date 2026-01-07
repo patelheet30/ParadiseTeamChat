@@ -33,6 +33,9 @@ public class TeamCommand implements CommandExecutor, TabCompleter {
         subcommands.put("leave", new TeamLeaveCommand(plugin));
         subcommands.put("info", new TeamInfoCommand(plugin));
         subcommands.put("edit", new TeamEditCommand(plugin));
+        subcommands.put("role", new TeamRoleCommand(plugin));
+        subcommands.put("promote", new TeamPromoteCommand(plugin));
+        subcommands.put("demote", new TeamDemoteCommand(plugin));
     }
 
     @Override
