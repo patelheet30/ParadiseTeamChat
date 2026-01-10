@@ -38,12 +38,6 @@ public class InviteManager {
     public boolean sendInvite(Player sender, String targetName, Team team) {
         String senderName = sender.getName();
 
-        // Verify sender is the team owner
-        if (!team.isOwner(senderName)) {
-            sender.sendMessage(configManager.getMessage("not-owner"));
-            return false;
-        }
-
         // Verify team is not full
         if (team.isFull()) {
             sender.sendMessage(configManager.getMessage("team-full"));
