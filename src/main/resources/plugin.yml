@@ -1,5 +1,5 @@
 name: ParadiseTeamChat
-version: 2.0.1
+version: 2.0.2
 main: com.patelheet.paradiseteamchat.ParadiseTeamChatPlugin
 description: High-performance team communication plugin for Paper servers
 api-version: '1.21'
