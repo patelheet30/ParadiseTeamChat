@@ -12,8 +12,10 @@ import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamBlockRepository;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
 import com.patelheet.paradiseteamchat.integrations.TeamChatExpansion;
+import com.patelheet.paradiseteamchat.listeners.BlockEffectListener;
 import com.patelheet.paradiseteamchat.listeners.ChatListener;
 import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
+import com.patelheet.paradiseteamchat.listeners.TeamBlockListener;
 import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
 import com.patelheet.paradiseteamchat.managers.CacheManager;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
@@ -86,6 +88,8 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         getLogger().info("ParadiseTeamChat plugin role manager initialised.");
 
         teamBlockRepository = new TeamBlockRepository(this, databaseManager);
+        getLogger().info("ParadiseTeamChat plugin team block repository initialised.");
+
         teamBlockManager = new TeamBlockManager(this);
         teamBlockManager.initialise();
         getLogger().info("ParadiseTeamChat plugin team block manager initialised.");
@@ -130,6 +134,11 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
             getLogger().info("ParadiseTeamChat plugin cache cleared.");
         }
 
+        if (teamBlockManager != null) {
+            teamBlockManager.clearCache();
+            getLogger().info("ParadiseTeamChat plugin team block cache cleared.");
+        }
+
         if (databaseManager != null) {
             databaseManager.close();
             getLogger().info("ParadiseTeamChat plugin database connection closed.");
@@ -171,6 +180,9 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerSessionListener(this), this);
+
+        getServer().getPluginManager().registerEvents(new TeamBlockListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockEffectListener(this), this);
     }
 
     /**
