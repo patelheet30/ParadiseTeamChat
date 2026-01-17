@@ -213,6 +213,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         return roleManager;
     }
 
+    public TeamBlockRepository getTeamBlockRepository() {
+        return teamBlockRepository;
+    }
+
     public void logDebug(String message) {
         if (configManager.isDebugMode()) {
             getLogger().info("[DEBUG] " + message);
