@@ -9,6 +9,7 @@ import com.patelheet.paradiseteamchat.commands.TeamChatCommand;
 import com.patelheet.paradiseteamchat.commands.TeamCommand;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
+import com.patelheet.paradiseteamchat.database.TeamBlockRepository;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
 import com.patelheet.paradiseteamchat.integrations.TeamChatExpansion;
 import com.patelheet.paradiseteamchat.listeners.ChatListener;
@@ -40,6 +41,7 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private ChatModeManager chatModeManager;
     private TeamChatExpansion placeholderExpansion;
     private RoleManager roleManager;
+    private TeamBlockRepository teamBlockRepository;
 
     @Override
     public void onEnable() {
@@ -80,6 +82,8 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         roleManager = new RoleManager(this);
         roleManager.initialise();
         getLogger().info("ParadiseTeamChat plugin role manager initialised.");
+
+        teamBlockRepository = new TeamBlockRepository(this, databaseManager);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholderExpansion = new TeamChatExpansion(this);
