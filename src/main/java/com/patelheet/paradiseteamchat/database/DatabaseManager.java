@@ -89,6 +89,20 @@ public class DatabaseManager {
                             ");");
 
             stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS team_blocks (" +
+                            "world TEXT NOT NULL," +
+                            "x INTEGER NOT NULL," +
+                            "y INTEGER NOT NULL," +
+                            "z INTEGER NOT NULL," +
+                            "block_type TEXT NOT NULL," +
+                            "owner_name TEXT NOT NULL," +
+                            "team_id INTEGER NOT NULL," +
+                            "placed_date INTEGER NOT NULL," +
+                            "PRIMARY KEY (world, x, y, z)," +
+                            "FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE" +
+                            ");");
+
+            stmt.execute(
                     "CREATE INDEX IF NOT EXISTS idx_members_name " +
                             "ON team_members(player_name);");
 
@@ -103,6 +117,15 @@ public class DatabaseManager {
             stmt.execute(
                     "CREATE INDEX IF NOT EXISTS idx_roles_player " +
                             "ON team_roles(player_name);");
+
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_blocks_owner " +
+                    "ON team_blocks(owner_name);");
+
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_blocks_team " +
+                    "ON team_blocks(team_id);");
+
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_blocks_type " +
+                    "ON team_blocks(block_type);");
         }
     }
 
