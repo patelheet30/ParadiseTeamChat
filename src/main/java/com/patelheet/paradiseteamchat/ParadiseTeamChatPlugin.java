@@ -20,6 +20,7 @@ import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.InviteManager;
 import com.patelheet.paradiseteamchat.utils.InputValidator;
 import com.patelheet.paradiseteamchat.managers.RoleManager;
+import com.patelheet.paradiseteamchat.managers.TeamBlockManager;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -42,6 +43,7 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private TeamChatExpansion placeholderExpansion;
     private RoleManager roleManager;
     private TeamBlockRepository teamBlockRepository;
+    private TeamBlockManager teamBlockManager;
 
     @Override
     public void onEnable() {
@@ -84,6 +86,9 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         getLogger().info("ParadiseTeamChat plugin role manager initialised.");
 
         teamBlockRepository = new TeamBlockRepository(this, databaseManager);
+        teamBlockManager = new TeamBlockManager(this);
+        teamBlockManager.initialise();
+        getLogger().info("ParadiseTeamChat plugin team block manager initialised.");
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholderExpansion = new TeamChatExpansion(this);
@@ -215,6 +220,10 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public TeamBlockRepository getTeamBlockRepository() {
         return teamBlockRepository;
+    }
+
+    public TeamBlockManager getTeamBlockManager() {
+        return teamBlockManager;
     }
 
     public void logDebug(String message) {
