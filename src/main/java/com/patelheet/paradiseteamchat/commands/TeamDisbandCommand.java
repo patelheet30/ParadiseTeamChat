@@ -84,6 +84,9 @@ public class TeamDisbandCommand extends BaseCommand {
                     // Clear all invites related to the team
                     plugin.getInviteManager().clearAllInvitesForTeam(teamId);
 
+                    // Clean up team blocks
+                    plugin.getTeamBlockManager().cleanupTeamBlocks(teamId);
+
                     for (String memberName : team.getMembers()) {
                         plugin.getChatModeManager().forceGlobalMode(memberName);
 

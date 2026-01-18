@@ -9,16 +9,20 @@ import com.patelheet.paradiseteamchat.commands.TeamChatCommand;
 import com.patelheet.paradiseteamchat.commands.TeamCommand;
 import com.patelheet.paradiseteamchat.config.ConfigManager;
 import com.patelheet.paradiseteamchat.database.DatabaseManager;
+import com.patelheet.paradiseteamchat.database.TeamBlockRepository;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
 import com.patelheet.paradiseteamchat.integrations.TeamChatExpansion;
+import com.patelheet.paradiseteamchat.listeners.BlockEffectListener;
 import com.patelheet.paradiseteamchat.listeners.ChatListener;
 import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
+import com.patelheet.paradiseteamchat.listeners.TeamBlockListener;
 import com.patelheet.paradiseteamchat.managers.AsyncTaskManager;
 import com.patelheet.paradiseteamchat.managers.CacheManager;
 import com.patelheet.paradiseteamchat.managers.ChatModeManager;
 import com.patelheet.paradiseteamchat.managers.InviteManager;
 import com.patelheet.paradiseteamchat.utils.InputValidator;
 import com.patelheet.paradiseteamchat.managers.RoleManager;
+import com.patelheet.paradiseteamchat.managers.TeamBlockManager;
 
 /**
  * ParadiseTeamChat Plugin - Main Class
@@ -40,6 +44,8 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private ChatModeManager chatModeManager;
     private TeamChatExpansion placeholderExpansion;
     private RoleManager roleManager;
+    private TeamBlockRepository teamBlockRepository;
+    private TeamBlockManager teamBlockManager;
 
     @Override
     public void onEnable() {
@@ -81,6 +87,13 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
         roleManager.initialise();
         getLogger().info("ParadiseTeamChat plugin role manager initialised.");
 
+        teamBlockRepository = new TeamBlockRepository(this, databaseManager);
+        getLogger().info("ParadiseTeamChat plugin team block repository initialised.");
+
+        teamBlockManager = new TeamBlockManager(this);
+        teamBlockManager.initialise();
+        getLogger().info("ParadiseTeamChat plugin team block manager initialised.");
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             placeholderExpansion = new TeamChatExpansion(this);
             placeholderExpansion.register();
@@ -119,6 +132,11 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
             cacheManager.shutdown();
             cacheManager.clearAll();
             getLogger().info("ParadiseTeamChat plugin cache cleared.");
+        }
+
+        if (teamBlockManager != null) {
+            teamBlockManager.clearCache();
+            getLogger().info("ParadiseTeamChat plugin team block cache cleared.");
         }
 
         if (databaseManager != null) {
@@ -162,6 +180,9 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private void registerListeners() {
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerSessionListener(this), this);
+
+        getServer().getPluginManager().registerEvents(new TeamBlockListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockEffectListener(this), this);
     }
 
     /**
@@ -207,6 +228,14 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
 
     public RoleManager getRoleManager() {
         return roleManager;
+    }
+
+    public TeamBlockRepository getTeamBlockRepository() {
+        return teamBlockRepository;
+    }
+
+    public TeamBlockManager getTeamBlockManager() {
+        return teamBlockManager;
     }
 
     public void logDebug(String message) {

@@ -132,6 +132,9 @@ public class AdminDisbandCommand extends BaseCommand implements TabCompleter {
                     // Clear all invites for this team
                     plugin.getInviteManager().clearAllInvitesForTeam(teamId);
 
+                    // Clean up team blocks
+                    plugin.getTeamBlockManager().cleanupTeamBlocks(teamId);
+
                     // Force all members to GLOBAL chat mode
                     for (String memberName : members) {
                         plugin.getChatModeManager().forceGlobalMode(memberName);

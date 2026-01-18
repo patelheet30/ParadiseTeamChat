@@ -29,6 +29,10 @@ public class ConfigManager {
     private boolean debugMode;
     private boolean allowEditing;
     private boolean chatIntegrationMode;
+    private boolean teamBlocksEnabled;
+    private List<String> supportedTeamBlocks;
+    private boolean notifyTeamBlockPlacement;
+    private boolean notifyEffectBlocked;
 
     /**
      * Constructor for ConfigManager
@@ -110,6 +114,11 @@ public class ConfigManager {
         // Chat integration mode
         chatIntegrationMode = config.getBoolean("performance.chat-integration-mode", false);
 
+        teamBlocksEnabled = config.getBoolean("team-blocks.enabled", true);
+        supportedTeamBlocks = config.getStringList("team-blocks.supported-blocks");
+        notifyTeamBlockPlacement = config.getBoolean("team-blocks.notify-placement", true);
+        notifyEffectBlocked = config.getBoolean("team-blocks.notify-effect-blocked", false);
+
     }
 
     /**
@@ -183,6 +192,22 @@ public class ConfigManager {
 
     public boolean isChatIntegrationMode() {
         return chatIntegrationMode;
+    }
+
+    public boolean isTeamBlocksEnabled() {
+        return teamBlocksEnabled;
+    }
+
+    public List<String> getSupportedTeamBlocks() {
+        return supportedTeamBlocks;
+    }
+
+    public boolean shouldNotifyTeamBlockPlacement() {
+        return notifyTeamBlockPlacement;
+    }
+
+    public boolean shouldNotifyEffectBlocked() {
+        return notifyEffectBlocked;
     }
 
     /**
