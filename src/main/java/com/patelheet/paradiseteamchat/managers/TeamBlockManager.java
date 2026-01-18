@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -67,8 +68,20 @@ public class TeamBlockManager {
      * @param material The material to check.
      * @return True if supported, false otherwise.
      */
-    public static boolean isSupportedBlock(Material material) {
-        return TEAM_EFFECT_BLOCKS.contains(material);
+    public boolean isSupportedBlock(Material material) {
+        if (!plugin.getConfigManager().isTeamBlocksEnabled()) {
+            return false;
+        }
+
+        List<String> configuredBlocks = plugin.getConfigManager().getSupportedTeamBlocks();
+
+        // If config list is empty, use defaults
+        if (configuredBlocks.isEmpty()) {
+            return TEAM_EFFECT_BLOCKS.contains(material);
+        }
+
+        // Check if material is in configured list
+        return configuredBlocks.contains(material.name());
     }
 
     /**

@@ -34,12 +34,17 @@ public class TeamBlockListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
+        // Check if team blocks are enabled
+        if (!plugin.getConfigManager().isTeamBlocksEnabled()) {
+            return;
+        }
+
         Player player = event.getPlayer();
         Block block = event.getBlockPlaced();
         Material type = block.getType();
 
         // Only care about effect blocks
-        if (!TeamBlockManager.isSupportedBlock(type)) {
+        if (!teamBlockManager.isSupportedBlock(type)) {
             return;
         }
 
@@ -80,7 +85,7 @@ public class TeamBlockListener implements Listener {
         Block block = event.getBlock();
 
         // Only care about effect blocks
-        if (!TeamBlockManager.isSupportedBlock(block.getType())) {
+        if (!teamBlockManager.isSupportedBlock(block.getType())) {
             return;
         }
 

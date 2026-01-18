@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 
 /**
  * Listens for special block effects applied to players from team blocks
- * (beacons, condiuts etc.) and
+ * (beacons, conduits etc.) and
  * applies them only if the player is a member of the team that owns the block.
  */
 public class BlockEffectListener implements Listener {
@@ -24,7 +24,7 @@ public class BlockEffectListener implements Listener {
     private static final int CONDUIT_RANGE = 42;
 
     /**
-     * Constructor for BeaconEffectListener.
+     * Constructor for BlockEffectListener.
      * 
      * @param plugin The main plugin instance.
      */
@@ -35,6 +35,11 @@ public class BlockEffectListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityPotionEffect(EntityPotionEffectEvent event) {
+        // Check if team blocks are enabled
+        if (!plugin.getConfigManager().isTeamBlocksEnabled()) {
+            return;
+        }
+
         // Only care about players
         if (!(event.getEntity() instanceof Player)) {
             return;

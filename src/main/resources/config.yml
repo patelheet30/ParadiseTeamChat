@@ -40,6 +40,14 @@ performance:
   chat-integration-mode: false  # false = override chat (default), true = integrate with existing chat plugins
   debug-mode: false             # Enable debug mode for more detailed logging
 
+# Team exclusive block effects
+team-blocks:
+  enabled: true                 # Enable team-exclusive block effects
+  supported-blocks:             # List of blocks that have team-exclusive effects
+    - BEACON
+    - CONDUIT
+  notify-placement: true        # Notify team members when a team block is placed
+  notify-effect-blocked: false  # Notify when a non-team member tries to use a team block (debug)
 
 # ===============================
 # ROLE SYSTEM CONFIGURATION
