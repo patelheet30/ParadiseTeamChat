@@ -12,6 +12,7 @@ import com.patelheet.paradiseteamchat.database.DatabaseManager;
 import com.patelheet.paradiseteamchat.database.TeamBlockRepository;
 import com.patelheet.paradiseteamchat.database.TeamRepository;
 import com.patelheet.paradiseteamchat.integrations.TeamChatExpansion;
+import com.patelheet.paradiseteamchat.integrations.SquaremapIntegration;
 import com.patelheet.paradiseteamchat.listeners.BlockEffectListener;
 import com.patelheet.paradiseteamchat.listeners.ChatListener;
 import com.patelheet.paradiseteamchat.listeners.PlayerSessionListener;
@@ -46,6 +47,7 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
     private RoleManager roleManager;
     private TeamBlockRepository teamBlockRepository;
     private TeamBlockManager teamBlockManager;
+    private SquaremapIntegration squaremapIntegration;
 
     @Override
     public void onEnable() {
@@ -100,6 +102,14 @@ public class ParadiseTeamChatPlugin extends JavaPlugin {
             getLogger().info("PlaceholderAPI integration enabled!");
         } else {
             getLogger().warning("PlaceholderAPI not found - placeholders will not work!");
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("Squaremap") != null && configManager.isSquaremapIntegrationEnabled()) {
+            squaremapIntegration = new SquaremapIntegration(this);
+            squaremapIntegration.register();
+            getLogger().info("Squaremap integration enabled!");
+        } else {
+            getLogger().info("Squaremap integration not enabled or Squaremap not found.");
         }
 
         registerCommands();
