@@ -34,6 +34,8 @@ blacklist:
     - "gc"
   case-sensitive: false         # Whether the blacklist is case-sensitive (if false, "Admin" matches "admin")
 
+squaremap-integration-enabled: false  # Enable integration with Squaremap to show team territories
+
 performance:
   async-operations: true        # Whether to perform database operations asynchronously (recommended for performance)
   cache-cleanup-delay: 60       # How often to cleanup cache (seconds)

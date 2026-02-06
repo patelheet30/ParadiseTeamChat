@@ -33,6 +33,7 @@ public class ConfigManager {
     private List<String> supportedTeamBlocks;
     private boolean notifyTeamBlockPlacement;
     private boolean notifyEffectBlocked;
+    private boolean squaremapIntegrationEnabled;
 
     /**
      * Constructor for ConfigManager
@@ -119,6 +120,8 @@ public class ConfigManager {
         notifyTeamBlockPlacement = config.getBoolean("team-blocks.notify-placement", true);
         notifyEffectBlocked = config.getBoolean("team-blocks.notify-effect-blocked", false);
 
+        // Squaremap integration
+        squaremapIntegrationEnabled = config.getBoolean("squaremap-integration-enabled", false);
     }
 
     /**
@@ -208,6 +211,10 @@ public class ConfigManager {
 
     public boolean shouldNotifyEffectBlocked() {
         return notifyEffectBlocked;
+    }
+
+    public boolean isSquaremapIntegrationEnabled() {
+        return squaremapIntegrationEnabled;
     }
 
     /**
