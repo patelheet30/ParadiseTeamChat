@@ -9,6 +9,11 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Admin command to transfer team ownership to another player.
@@ -129,23 +134,62 @@ public class TransferOwnerCommand extends BaseCommand implements TabCompleter {
 
         // Update database (async)
         plugin.getAsyncTaskManager().supplyAsync(() -> {
-            // SQL: UPDATE teams SET owner_name = ? WHERE id = ?
+            Connection conn = null;
+            PreparedStatement pstmt1 = null;
+            PreparedStatement pstmt2 = null;
+            PreparedStatement pstmt3 = null;
+
             try {
-                java.sql.Connection conn = plugin.getDatabaseManager().getConnection();
-                java.sql.PreparedStatement pstmt = conn.prepareStatement(
-                        "UPDATE teams SET owner_name = ? WHERE id = ?");
-                pstmt.setString(1, newOwnerLower);
-                pstmt.setInt(2, teamId);
+                conn = plugin.getDatabaseManager().getConnection();
 
-                int rowsAffected = pstmt.executeUpdate();
-                pstmt.close();
+                // 1. Update teams table - set new owner
+                String sql1 = "UPDATE teams SET owner_name = ? WHERE id = ?";
+                pstmt1 = conn.prepareStatement(sql1);
+                pstmt1.setString(1, newOwnerLower);
+                pstmt1.setInt(2, teamId);
+                int teamsUpdated = pstmt1.executeUpdate();
 
-                return rowsAffected > 0;
+                if (teamsUpdated == 0) {
+                    return false;
+                }
 
-            } catch (java.sql.SQLException e) {
-                plugin.getLogger().severe("Error updating team owner: " + e.getMessage());
+                // 2. Update new owner's role to "owner" in team_roles table
+                String sql2 = "INSERT OR REPLACE INTO team_roles (team_id, player_name, role_id, assigned_date) VALUES (?, ?, ?, ?)";
+                pstmt2 = conn.prepareStatement(sql2);
+                pstmt2.setInt(1, teamId);
+                pstmt2.setString(2, newOwnerLower);
+                pstmt2.setString(3, "owner");
+                pstmt2.setLong(4, System.currentTimeMillis());
+                pstmt2.executeUpdate();
+
+                // 3. Update old owner's role to "member" in team_roles table
+                String sql3 = "INSERT OR REPLACE INTO team_roles (team_id, player_name, role_id, assigned_date) VALUES (?, ?, ?, ?)";
+                pstmt3 = conn.prepareStatement(sql3);
+                pstmt3.setInt(1, teamId);
+                pstmt3.setString(2, oldOwner);
+                pstmt3.setString(3, "member");
+                pstmt3.setLong(4, System.currentTimeMillis());
+                pstmt3.executeUpdate();
+
+                plugin.logDebug("Database updated: " + oldOwner + " -> " + newOwnerLower + " (team: " + teamName + ")");
+                return true;
+
+            } catch (SQLException e) {
+                plugin.getLogger().severe("Error updating team ownership: " + e.getMessage());
                 e.printStackTrace();
                 return false;
+            } finally {
+                // Close all prepared statements
+                try {
+                    if (pstmt1 != null)
+                        pstmt1.close();
+                    if (pstmt2 != null)
+                        pstmt2.close();
+                    if (pstmt3 != null)
+                        pstmt3.close();
+                } catch (SQLException e) {
+                    plugin.getLogger().warning("Error closing prepared statements: " + e.getMessage());
+                }
             }
         }).thenAccept(success -> {
             // Back to main thread for cache updates and notifications
@@ -160,12 +204,22 @@ public class TransferOwnerCommand extends BaseCommand implements TabCompleter {
                             team.getCreatedDate(),
                             team.getMemberLimit());
 
-                    // Copy members
+                    Map<String, String> currentRoles = team.getAllMemberRoles();
+
                     for (String member : team.getMembers()) {
                         if (!member.equals(newOwnerLower)) {
-                            updatedTeam.addMember(member);
+                            String memberRole = currentRoles.getOrDefault(member, "member");
+
+                            if (member.equals(oldOwner)) {
+                                memberRole = "member";
+                            }
+
+                            updatedTeam.addMember(member, memberRole);
                         }
                     }
+
+                    // Set the new owner's role to "owner" in the team object
+                    updatedTeam.setMemberRole(newOwnerLower, "owner");
 
                     // Update cache with new team object
                     plugin.getCacheManager().updateTeamCache(updatedTeam);
