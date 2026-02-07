@@ -30,7 +30,7 @@ import com.patelheet.paradiseteamchat.managers.TeamBlockManager;
  * for Paper servers
  * 
  * @author Heet Patel (patelheet30)
- * @version 3.0.0
+ * @version 3.0.1
  */
 public class ParadiseTeamChatPlugin extends JavaPlugin {
     private static ParadiseTeamChatPlugin instance;
